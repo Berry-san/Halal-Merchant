@@ -1,7 +1,7 @@
 import dashboardIcon from '../assets/icons/dashboardIcon.svg'
 import accountIcon from '../assets/icons/accountIcon.svg'
 import orderIcon from '../assets/icons/orderIcon.svg'
-import productIcon from '../assets/icons/productIcon.svg'
+import productsIcon from '../assets/icons/productsIcon.svg'
 import paths from '../routes/paths'
 
 export const MerchantSidebarLinks = [
@@ -20,7 +20,7 @@ export const MerchantSidebarLinks = [
   {
     label: 'Product',
     href: paths.products,
-    icon: productIcon,
+    icon: productsIcon,
     id: 3,
   },
   {
