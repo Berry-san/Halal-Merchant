@@ -1,5 +1,4 @@
 // categoryService.ts
-import axios from 'axios'
 import {
   Category,
   Subcategory,
@@ -27,7 +26,6 @@ export const categoryService = {
   // Fetch all subcategories
   async fetchAllSubcategories(): Promise<Subcategory[]> {
     const response = await apiBase.get(`${BASE_URL}/all_subcategories`)
-    console.log(response.data)
     return response.data
   },
 
@@ -67,11 +65,11 @@ export const categoryService = {
 
   // Delete a category
   async deleteCategory(categoryId: number): Promise<void> {
-    await apiBase.delete(`${BASE_URL}/delete_categories/${categoryId}`)
+    await apiBase.post(`${BASE_URL}/delete_categories/${categoryId}`)
   },
 
   // Delete a subcategory
   async deleteSubcategory(subcategoryId: number): Promise<void> {
-    await apiBase.delete(`${BASE_URL}/delete_subcategories/${subcategoryId}`)
+    await apiBase.post(`${BASE_URL}/delete_subcategories/${subcategoryId}`)
   },
 }

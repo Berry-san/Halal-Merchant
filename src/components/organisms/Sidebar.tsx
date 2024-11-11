@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react'
 import { MerchantSidebarLinks } from '../../constants/navigation'
 // import { UserSidebarLinks } from '../lib/constants/navigation'
 import { NavLink } from 'react-router-dom'
+import LogoutButton from '../atoms/LogoutButton'
 // import back from '../assets/back.svg'
 // import smartcareLogo from '../assets/smartcareLogo.svg'
 
@@ -63,6 +64,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
       if (window.innerWidth >= 1279) {
         setSidebarOpen(false)
         setOverlayActive(false)
+        setSidebarExpanded(false)
       }
     }
     document.addEventListener('click', clickHandler)
@@ -108,10 +110,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
         }`}
       >
         {/* SIDEBAR HEADER */}
-        <div className="flex items-center justify-between gap-2 pt-5 lg:hidden">
-          <div>
-            {/* <img src={smartcareLogo} className="w-12 h-12" alt="" /> */}
-          </div>
+        <div className="flex items-center justify-end gap-2 pt-5 lg:hidden">
           <button
             ref={trigger}
             onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -120,6 +119,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
             className="block lg:hidden"
           >
             {/* <img src={back} alt="" className="flex w-5 h-5" /> */}
+            close
           </button>
         </div>
         {/* SIDEBAR HEADER */}
@@ -140,6 +140,9 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
                   />
                 ))}
               </ul>
+              <div className="py-4 mt-4">
+                <LogoutButton />
+              </div>
             </div>
           </nav>
         </div>
@@ -172,12 +175,8 @@ const SidebarLinks: React.FC<SidebarLinksProps> = ({ link, onClick }) => {
               : 'group relative flex items-center gap-5 font-semibold px-4 py-2 text-black duration-300 ease-in-out'
           }
         >
-          {({ isActive }) => (
-            <>
-              <img src={link.icon} className="w-6 h-6" alt={link.label} />
-              {link.label}
-            </>
-          )}
+          <img src={link.icon} className="w-6 h-6" alt={link.label} />
+          {link.label}
         </NavLink>
       ) : (
         <div
@@ -211,16 +210,12 @@ const SidebarLinks: React.FC<SidebarLinksProps> = ({ link, onClick }) => {
                     : 'group flex items-center gap-5 font-semibold rounded-sm p-2 text-dark_color duration-300 ease-in-out'
                 }
               >
-                {({ isActive }) => (
-                  <>
-                    <img
-                      src={subLink.icon}
-                      className="w-5 h-5"
-                      alt={subLink.label}
-                    />
-                    {subLink.label}
-                  </>
-                )}
+                <img
+                  src={subLink.icon}
+                  className="w-5 h-5"
+                  alt={subLink.label}
+                />
+                {subLink.label}
               </NavLink>
             </li>
           ))}

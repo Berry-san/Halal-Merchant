@@ -23,15 +23,17 @@ const Account: React.FC = () => {
   }
 
   return (
-    <div className="p-6 max-w-2xl text-gray-800">
+    <div className="max-w-2xl text-gray-800 xl:p-6">
       {/* User header */}
       <div className="flex items-center mb-6">
-        <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-300 mr-4">
+        <div className="flex items-center justify-center w-12 h-12 mr-4 bg-gray-300 rounded-full">
           <span className="text-lg font-semibold text-black">{initials}</span>
         </div>
         <div>
           <h2 className="text-xl font-semibold">{merchant?.names}</h2>
-          <p className="text-gray-500">{merchant?.phonenumber}, phone number</p>
+          <p className="text-gray-500">
+            {merchant?.merchant_business_name} , {merchant?.phonenumber}
+          </p>
         </div>
       </div>
 

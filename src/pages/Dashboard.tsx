@@ -98,11 +98,6 @@ import DatePickerComponent from '../components/atoms/DatePickerComponent'
 import SummaryCard from '../components/molecules/SummaryCard'
 import useSummaryData from '../hooks/useSummaryData'
 
-interface SummaryItem {
-  title: string
-  value: string | number
-}
-
 const Dashboard = () => {
   const [startDate, setStartDate] = useState<Date | null>(null)
   const [endDate, setEndDate] = useState<Date | null>(null)

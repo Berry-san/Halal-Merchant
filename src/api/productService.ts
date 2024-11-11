@@ -1,51 +1,108 @@
-// productService.ts
-import {
-  Product,
-  ProductDetails,
-  AddProductRequest,
-  UpdateProductRequest,
-} from '../shared.types'
+import { Product, ProductDetails, UpdateProductRequest } from '../shared.types'
 import { apiBase } from './apiBase'
 
 const BASE_URL = '/products'
 
 export const productService = {
-  // Fetch products list
+  // Fetch the list of products
   async fetchProductsList(): Promise<Product[]> {
-    const response = await apiBase.get(`${BASE_URL}/products_list`)
-    console.log(response.data)
-    return response.data.products
+    try {
+      const response = await apiBase.get(`${BASE_URL}/products_list`)
+      return response.data.products
+    } catch (error) {
+      console.error('Error fetching products list:', error)
+      throw new Error('Could not fetch products list')
+    }
   },
 
-  // Fetch product details
+  // Fetch details for a specific product by ID
   async fetchProductDetails(productId: number): Promise<ProductDetails> {
-    const response = await apiBase.get(
-      `${BASE_URL}/product_details/${productId}`
-    )
-    return response.data
+    try {
+      const response = await apiBase.get(
+        `${BASE_URL}/product_details/${productId}`
+      )
+      return response.data.productDetails
+    } catch (error) {
+      console.error(
+        `Error fetching product details for ID ${productId}:`,
+        error
+      )
+      throw new Error('Could not fetch product details')
+    }
   },
 
-  // Add new product
-  async addProduct(productData: AddProductRequest): Promise<Product> {
-    const response = await apiBase.post(`${BASE_URL}/add_product`, productData)
-    return response.data
+  // Add a new product to the database
+  async addProduct(formData: FormData): Promise<void> {
+    try {
+      const response = await apiBase.post(`${BASE_URL}/add_product`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      return response.data
+    } catch (error) {
+      console.error('Error adding new product:', error)
+      throw new Error('Could not add new product')
+    }
   },
 
-  // Update product
+  // Update an existing product by ID
   async updateProduct(
-    productId: number,
-    updateData: UpdateProductRequest
+    productId: number | string,
+    updateData: FormData | UpdateProductRequest
   ): Promise<void> {
-    const response = await apiBase.post(
-      `${BASE_URL}/update_product/${productId}`,
-      updateData
-    )
-    console.log(response.data)
-    return response.data
-  },
+    try {
+      const dataToSend =
+        updateData instanceof FormData ? updateData : new FormData()
 
-  // Delete product
-  async deleteProduct(productId: number): Promise<void> {
-    await apiBase.delete(`${BASE_URL}/delete_product/${productId}`)
+      if (!(updateData instanceof FormData)) {
+        // Convert JSON data to FormData
+        Object.keys(updateData).forEach((key) => {
+          const value = updateData[key as keyof UpdateProductRequest]
+          if (
+            value !== undefined &&
+            value !== null &&
+            typeof value !== 'object'
+          ) {
+            dataToSend.append(key, String(value))
+          }
+        })
+
+        // Check if product_picture exists before accessing it
+        if (updateData.product_picture) {
+          Object.keys(updateData.product_picture).forEach((key) => {
+            const picture = updateData.product_picture?.[key]
+            if (picture) {
+              if (typeof picture === 'string') {
+                dataToSend.append(`${key}_url`, picture) // Append URL if string
+              } else if (picture instanceof Blob) {
+                dataToSend.append(key, picture) // Append as file if Blob/File
+              }
+            }
+          })
+        }
+      }
+
+      await apiBase.post(
+        `${BASE_URL}/update_product/${productId}`,
+        dataToSend,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      )
+    } catch (error) {
+      console.error(`Error updating product with ID ${productId}:`, error)
+      throw new Error('Could not update product')
+    }
+  },
+  // Delete a product by ID
+  async deleteProduct(productId: number | string): Promise<void> {
+    try {
+      await apiBase.post(`${BASE_URL}/delete_product/${productId}`)
+      console.log(`Product with ID ${productId} has been deleted successfully`)
+    } catch (error) {
+      console.error(`Error deleting product with ID ${productId}:`, error)
+      throw new Error('Could not delete product')
+    }
   },
 }

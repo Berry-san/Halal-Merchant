@@ -7,6 +7,7 @@ interface MerchantStore {
   merchant: Merchant | null
   setMerchant: (merchant: Merchant) => void
   clearMerchant: () => void
+  logout: () => void // Adding the logout function here
 }
 
 export const useMerchantStore = create(
@@ -15,6 +16,10 @@ export const useMerchantStore = create(
       merchant: null,
       setMerchant: (data) => set({ merchant: data }),
       clearMerchant: () => set({ merchant: null }),
+      logout: () => {
+        set({ merchant: null }) // Clear the merchant data
+        sessionStorage.removeItem('auth-storage') // Optionally remove from session storage directly
+      },
     }),
     {
       name: 'auth-storage', // Name of the storage (localStorage key)

@@ -1,6 +1,5 @@
 // hooks/useSummaryData.ts
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import { apiBase } from '../api/apiBase'
 
 const useSummaryData = (startDate: Date | null, endDate: Date | null) => {

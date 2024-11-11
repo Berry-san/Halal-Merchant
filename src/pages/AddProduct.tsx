@@ -12,7 +12,7 @@ import { productService } from '../api/productService'
 import { Category, Subcategory } from '../shared.types'
 
 const AddProduct = () => {
-  const { data: categories, isLoading: loadingCategories } = useAllCategories()
+  const { data: categories } = useAllCategories()
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | string>(
     ''
   )
@@ -22,23 +22,23 @@ const AddProduct = () => {
     selectedCategoryId as number
   )
 
-  // Handle image upload
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null)
+  // State for storing the uploaded file
+  const [uploadedImage, setUploadedImage] = useState<File | null>(null)
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
-      setUploadedImage(URL.createObjectURL(file))
+      setUploadedImage(file)
     }
   }
 
-  const addProductMutation = useMutation((productData: any) =>
-    productService.addProduct(productData)
+  const addProductMutation = useMutation((formData: FormData) =>
+    productService.addProduct(formData)
   )
 
   const formik = useFormik({
     initialValues: {
       productName: '',
-      productShortName: '',
+      shortProductName: '',
       productCategory: '',
       productSubCategory: '',
       productDescription: '',
@@ -49,11 +49,10 @@ const AddProduct = () => {
       productColor: '',
       productQuantity: '',
       expiryDate: '',
-      uploadedImage: '',
     },
     validationSchema: Yup.object({
       productName: Yup.string().required('Product Name is required'),
-      productShortName: Yup.string().required('Short Name is required'),
+      shortProductName: Yup.string().required('Short Name is required'),
       productCategory: Yup.string().required('Category is required'),
       productSubCategory: Yup.string().required('Subcategory is required'),
       productDescription: Yup.string().required('Description is required'),
@@ -66,13 +65,51 @@ const AddProduct = () => {
       expiryDate: Yup.date().required('Expiry Date is required').nullable(),
     }),
     onSubmit: (values) => {
-      addProductMutation.mutate(values)
+      const formData = new FormData()
+      formData.append('productName', values.productName)
+      formData.append('shortProductName', values.shortProductName)
+      formData.append('productPrice', values.productPrice)
+      formData.append('productDescription', values.productDescription)
+      formData.append('productModel', values.productModel)
+      formData.append('productColor', values.productColor)
+      formData.append('productQuantity', values.productQuantity)
+      formData.append('expiryDate', values.expiryDate)
+      formData.append('categoryId', values.productCategory)
+      formData.append('subCategoryId', values.productSubCategory)
+      formData.append('productDiscountPercentage', values.productDiscount)
+      formData.append('vat', values.vat)
+      if (uploadedImage) {
+        formData.append('productPictures', uploadedImage)
+      }
+
+      // Send FormData directly
+      addProductMutation.mutate(formData)
     },
+    // onSubmit: (values) => {
+    //   const productData: AddProductRequest = {
+    //     productName: values.productName,
+    //     shortProductName: values.shortProductName,
+    //     productPrice: parseFloat(values.productPrice),
+    //     productDescription: values.productDescription,
+    //     productModel: values.productModel,
+    //     productColor: values.productColor,
+    //     productQuantity: values.productQuantity,
+    //     productPictures: uploadedImage!,
+    //     expiryDate: new Date(values.expiryDate),
+    //     categoryId: parseInt(values.productCategory),
+    //     subCategoryId: parseInt(values.productSubCategory),
+    //     merchantId: 1, // Replace with dynamic merchant ID if needed
+    //     productDiscountPercentage: parseFloat(values.productDiscount),
+    //     vat: parseFloat(values.vat),
+    //   }
+
+    //   addProductMutation.mutate(productData)
+    // },
   })
 
   useEffect(() => {
     if (categories && categories.length > 0) {
-      setSelectedCategoryId(categories[0].category_id) // Set default category
+      setSelectedCategoryId(categories[0].category_id)
     }
   }, [categories])
 
@@ -80,8 +117,8 @@ const AddProduct = () => {
     <div>
       <h2>Product Information</h2>
       <form onSubmit={formik.handleSubmit}>
-        <div className="gap-5 mt-2 grid grid-cols-5">
-          <section className="border rounded p-4 col-span-5 lg:col-span-3">
+        <div className="grid grid-cols-5 gap-5 mt-2">
+          <section className="col-span-5 p-4 border rounded lg:col-span-3">
             <h3>General Information</h3>
             <div className="mt-2">
               <div className="flex flex-col gap-5 space-y-5">
@@ -98,13 +135,13 @@ const AddProduct = () => {
                   />
                   <InputField
                     label="Product Short Name"
-                    name="productShortName"
-                    value={formik.values.productShortName}
+                    name="shortProductName"
+                    value={formik.values.shortProductName}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     error={
-                      formik.touched.productShortName &&
-                      formik.errors.productShortName
+                      formik.touched.shortProductName &&
+                      formik.errors.shortProductName
                     }
                   />
                   <div className="flex flex-col space-y-2">
@@ -119,7 +156,7 @@ const AddProduct = () => {
                         formik.setFieldValue('productCategory', e.target.value)
                       }}
                       onBlur={formik.handleBlur}
-                      className="w-full border px-5 py-3 focus:outline-none rounded-md"
+                      className="w-full px-5 py-3 border rounded-md focus:outline-none"
                     >
                       <option value="">Select a category</option>
                       {categories?.map((category: Category) => (
@@ -151,7 +188,7 @@ const AddProduct = () => {
                       value={formik.values.productSubCategory}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      className="w-full border px-5 py-3 focus:outline-none rounded-md"
+                      className="w-full px-5 py-3 border rounded-md focus:outline-none"
                     >
                       <option value="">Select a sub-category</option>
                       {subcategories?.map((sub: Subcategory) => (
@@ -187,7 +224,7 @@ const AddProduct = () => {
 
                 <section>
                   <h3>Price Information</h3>
-                  <div className="gap-5 grid grid-cols-2 mt-2">
+                  <div className="grid grid-cols-2 gap-5 mt-2">
                     <InputField
                       label="Product Price"
                       name="productPrice"
@@ -269,7 +306,7 @@ const AddProduct = () => {
           </section>
 
           <section className="col-span-2">
-            <div className="border rounded p-4">
+            <div className="p-4 border rounded">
               <h3>Product Image</h3>
               <div className="flex items-center justify-center w-full">
                 <label
@@ -278,12 +315,12 @@ const AddProduct = () => {
                 >
                   {uploadedImage ? (
                     <img
-                      src={uploadedImage}
+                      src={URL.createObjectURL(uploadedImage)}
                       alt="Uploaded Preview"
-                      className="h-64 w-full object-fill rounded-lg"
+                      className="object-fill w-full h-64 rounded-lg"
                     />
                   ) : null}
-                  <p className="text-center text-gray-500 py-4 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 w-full mt-2">
+                  <p className="w-full py-4 mt-2 text-center text-gray-500 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
                     {uploadedImage
                       ? 'Change Product Image'
                       : 'Upload Product Image'}
@@ -303,7 +340,7 @@ const AddProduct = () => {
 
         <button
           type="submit"
-          className="mt-5 px-4 py-2 text-white bg-black rounded-md"
+          className="px-4 py-2 mt-5 text-white bg-black rounded-md"
         >
           {addProductMutation.isLoading ? 'Saving...' : 'Save Product'}
         </button>

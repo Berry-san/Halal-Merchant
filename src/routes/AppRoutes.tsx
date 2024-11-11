@@ -9,29 +9,34 @@ import paths from './paths'
 import Orders from '../pages/Orders'
 import Account from '../pages/Account'
 import Categories from '../pages/Categories'
+import TrackOrder from '../pages/TrackOrder'
+import EditProduct from '../pages/EditProduct'
+import { useMerchantStore } from '../store/useMerchantStore'
 
 function AppRoutes() {
-  //   const { user } = useAuthStore((state) => ({
-  //     user: state.user,
-  //   }))
+  const { merchant } = useMerchantStore()
 
-  //   const authChecker = user?.isAuthenticated
+  const authChecker = merchant?.isAuthenticated
+  console.log(authChecker)
+  console.log(merchant)
 
   return (
     <Routes>
       <Route
         path={paths.login}
-        // element={authChecker ? <Navigate replace to="/" /> : <Login />}
-        element={<Login />}
+        element={authChecker === true ? <Navigate replace to="/" /> : <Login />}
+        // element={<Login />}
       />
       <Route path={paths.signUp} element={<SignUp />} />
       {/* <Route path={paths.forgotPassword} element={<ForgotPassword />} /> */}
+      <Route path={paths.trackOrder} element={<TrackOrder />} />
 
       <Route path={paths.dashboard} element={<Layout />}>
         <Route index element={<Dashboard />} />
         <Route path={paths.orders} element={<Orders />} />
         <Route path={paths.products} element={<Products />} />
         <Route path={paths.addProduct} element={<AddProduct />} />
+        <Route path={paths.editProduct} element={<EditProduct />} />
         <Route path={paths.account} element={<Account />} />
         <Route path={paths.categories} element={<Categories />} />
       </Route>

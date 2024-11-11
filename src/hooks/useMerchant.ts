@@ -6,6 +6,8 @@ import {
   MerchantRegistration,
   MerchantDetailsRequest,
   MerchantLoginRequest,
+  MerchantComplaintRequest,
+  MerchantUpdateRequest,
 } from '../shared.types'
 
 export function useAllMerchants() {
@@ -37,5 +39,25 @@ export function useMerchantDetails() {
 export function useMerchantLogin() {
   return useMutation((loginData: MerchantLoginRequest) =>
     merchantService.loginMerchant(loginData)
+  )
+}
+
+export function useMerchantComplaint() {
+  return useMutation((data: MerchantComplaintRequest) =>
+    merchantService.sendMerchantComplaint(data)
+  )
+}
+
+export const useUpdateMerchantDetails = () => {
+  return useMutation<Merchant, Error, MerchantUpdateRequest>(
+    (updateData) => merchantService.updateMerchantDetails(updateData),
+    {
+      onSuccess: (data) => {
+        console.log('Merchant details updated successfully:', data)
+      },
+      onError: (error) => {
+        console.error('Failed to update merchant details:', error)
+      },
+    }
   )
 }

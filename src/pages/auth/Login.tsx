@@ -37,12 +37,34 @@ const Login: React.FC = () => {
         },
         {
           onSuccess: (data) => {
-            toast.success('Login successful!')
-            navigate('/')
-            setMerchant(data)
+            if (data.active_status === 'active') {
+              const merchantData = {
+                email_address: data.email,
+                names: data.names,
+                merchant_business_name: data.merchant_business_name,
+                merchant_id: data.merchant_id,
+                gender: data.gender,
+                email: data.email,
+                address: data.address,
+                bvn: data.bvn,
+                phonenumber: data.phonenumber,
+                providus_account_no: data.providus_account_no,
+                user_type_id: data.user_type_id,
+                isAuthenticated: true,
+                active_status: data.active_status,
+              }
+              setMerchant(merchantData)
+              toast.success('Login successful!')
+              navigate('/')
+            } else {
+              toast.error('Account is not active. Please contact support.')
+            }
           },
-          onError: (error: any) => {
-            toast.error(error.response?.data?.message || 'Login failed.')
+          onError: (error: unknown) => {
+            console.error(error)
+            const message =
+              error instanceof Error ? error.message : 'Login failed'
+            toast.error(message)
           },
         }
       )
@@ -56,13 +78,13 @@ const Login: React.FC = () => {
       ) : (
         <div className="bg-[#ffffff] max-w-3xl mx-auto rounded-md">
           <div className="px-4 py-6 md:px-10">
-            <div className="flex flex-col mb-5 border rounded p-4">
+            <div className="flex flex-col p-4 mb-5 border rounded">
               <h4 className="text-sm font-semibold">Sign in</h4>
               <p className="text-gray-500">
                 Welcome back! Access your HalalNest store
               </p>
             </div>
-            <div className="border rounded p-4">
+            <div className="p-4 border rounded">
               <form onSubmit={loginValue.handleSubmit}>
                 <div className="flex flex-col text-left gap-x-5 gap-y-5">
                   <div>
@@ -71,7 +93,7 @@ const Login: React.FC = () => {
                     </label>
                     <input
                       type="email"
-                      className="w-full border px-5 py-3 focus:outline-none rounded-md"
+                      className="w-full px-5 py-3 border rounded-md focus:outline-none"
                       id="emailAddress"
                       name="emailAddress"
                       value={loginValue.values.emailAddress}
@@ -92,7 +114,7 @@ const Login: React.FC = () => {
                     <div className="relative">
                       <input
                         type={showPassword ? 'text' : 'password'}
-                        className="w-full border px-5 py-3 focus:outline-none rounded-md"
+                        className="w-full px-5 py-3 border rounded-md focus:outline-none"
                         id="password"
                         name="password"
                         value={loginValue.values.password}
@@ -149,7 +171,7 @@ const Login: React.FC = () => {
                         {loginValue.errors.password}
                       </p>
                     ) : null}
-                    <div className="mt-1 flex justify-end">
+                    <div className="flex justify-end mt-1">
                       <Link
                         to="/resetPassword"
                         className="text-sm font-semibold underline"
@@ -171,7 +193,7 @@ const Login: React.FC = () => {
                     You dont have an account?{' '}
                     <Link
                       to={paths.signUp}
-                      className="text-sm font-semibold underline mt-2"
+                      className="mt-2 text-sm font-semibold underline"
                     >
                       Sign Up
                     </Link>

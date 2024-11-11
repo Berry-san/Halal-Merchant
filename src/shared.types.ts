@@ -2,7 +2,7 @@
 
 // Product types
 export interface Product {
-  product_id: number
+  product_id: number | string
   category_id: string
   sub_category_id: string
   merchant_id: string
@@ -12,8 +12,8 @@ export interface Product {
   product_price: string
   product_model: string
   product_color: string
-  product_picture: {
-    picture1: string
+  product_picture?: {
+    picture1?: string | File // Explicitly allow string or File here
   }
   expiry_date: string
   product_discount_percentage: string
@@ -58,8 +58,14 @@ export interface UpdateProductRequest {
   product_color?: string
   product_quantity?: string
   product_discount_percentage?: string
+  product_picture?: {
+    [key: string]: string | File
+  }
+  category_id?: string
+  sub_category_id?: string
   vat?: string
   status?: string
+  expiry_date?: string
 }
 
 // Delete product request type
@@ -75,6 +81,7 @@ export interface MerchantRegistration {
   address: string
   password: string
   phonenumber: string
+  merchant_business_name: string
   providus_account_no?: string
   status?: number
 }
@@ -180,6 +187,7 @@ export interface RegisterBody {
   address: string
   password: string
   phonenumber: string
+  merchant_business_name: string
 }
 
 // Request body for login
@@ -192,6 +200,7 @@ export interface LoginBody {
 export interface Merchant {
   merchant_id: number
   names: string
+  merchant_business_name: string
   gender: string
   email: string
   address: string
@@ -199,6 +208,23 @@ export interface Merchant {
   phonenumber: string
   providus_account_no: string | null
   user_type_id: string
-  registered_at: string
+  registered_at?: string
   active_status: string
+  isAuthenticated?: boolean
+}
+
+export interface MerchantComplaintRequest {
+  email: string
+  merchant_name: string
+  merchantId: string | number
+  subject: string
+  message: string
+}
+
+export interface MerchantUpdateRequest {
+  email: string
+  pin?: string // Optional
+  merchant_business_name?: string
+  address?: string
+  // Add other optional fields you might have
 }

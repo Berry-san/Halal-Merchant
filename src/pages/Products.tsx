@@ -1,10 +1,16 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import SelectDropdown from '../components/atoms/SelectDropdown'
 import SearchBar from '../components/molecules/SearchBar'
 import ProductTable from '../components/molecules/ProductTable'
 import { Column } from '../components/molecules/Table'
-import { useProductsList, useUpdateProduct } from '../hooks/useProducts'
+import {
+  useDeleteProduct,
+  useProductsList,
+  useUpdateProduct,
+} from '../hooks/useProducts'
 import { Product } from '../shared.types'
+import { useNavigate } from 'react-router-dom'
+// import paths from '../routes/paths'
 
 const statusOptions = [
   { label: 'Accepted', value: 'accepted' },
@@ -14,6 +20,7 @@ const statusOptions = [
 ]
 
 const Products: React.FC = () => {
+  const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('')
 
@@ -28,15 +35,38 @@ const Products: React.FC = () => {
     { header: 'Status', key: 'status' },
   ]
 
+  const handleEditProduct = (product: Product) => {
+    navigate(`/products/edit-product/${product.product_id}`, {
+      state: { product },
+    })
+  }
+
+  const handleAddProduct = () => {
+    navigate(`/products/add-product`)
+  }
+
   // Mutation hook for updating product status
   const updateProductMutation = useUpdateProduct()
 
+  const deleteProductMutation = useDeleteProduct()
+
   // Handle status toggle for each product
-  const handleToggleStatus = (productId: number, newStatus: string) => {
+  const handleToggleStatus = (
+    productId: number | string,
+    newStatus: string
+  ) => {
+    const formData = new FormData()
+    formData.append('status', newStatus)
+
     updateProductMutation.mutate({
       productId,
-      status: newStatus, // Directly pass status here
+      updateData: formData,
     })
+  }
+
+  // Handle deletion of a product
+  const handleDeleteProduct = (productId: number | string) => {
+    deleteProductMutation.mutate(productId)
   }
 
   // Filter table data based on search term and selected status
@@ -55,8 +85,18 @@ const Products: React.FC = () => {
 
   return (
     <div>
-      <h2>My Products</h2>
-      <div className="mb-4 flex gap-4 items-end">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-bold">My Products</h2>
+        <div className="space-x-4">
+          <button
+            onClick={handleAddProduct}
+            className="px-4 py-2 text-white rounded bg-secondary"
+          >
+            Add Product
+          </button>
+        </div>
+      </div>
+      <div className="flex items-end gap-4 mb-4">
         <SearchBar
           placeholder="Search products..."
           value={searchTerm}
@@ -73,6 +113,8 @@ const Products: React.FC = () => {
         columns={columns}
         data={filteredProducts}
         handleToggleStatus={handleToggleStatus}
+        handleEditProduct={handleEditProduct}
+        handleDeleteProduct={handleDeleteProduct} // Pass delete handler
       />
     </div>
   )

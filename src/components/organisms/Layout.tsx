@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import Header from './Header'
-import Breadcrumb from '../molecules/Breadcrumbs'
+import { useMerchantStore } from '../../store/useMerchantStore'
 
 const Layout: React.FC = () => {
-  const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
+  const navigate = useNavigate()
   //   const { user } = useAuthStore((state) => ({
   //     user: state.user,
   //   }))
@@ -16,6 +16,14 @@ const Layout: React.FC = () => {
   //   useEffect(() => {
   //     if (!authChecker) navigate('/login')
   //   }, [authChecker, navigate])
+
+  const { merchant } = useMerchantStore()
+
+  const authChecker = merchant?.isAuthenticated
+
+  useEffect(() => {
+    if (!authChecker) navigate('/login')
+  }, [authChecker, navigate])
 
   return (
     <div className="w-full flex flex-col h-screen overflow-hidden bg-[#f4f5f9]">

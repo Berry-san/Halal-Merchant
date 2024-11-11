@@ -6,8 +6,6 @@ import {
   Subcategory,
   AddCategoryRequest,
   AddSubcategoryRequest,
-  UpdateCategoryRequest,
-  UpdateSubcategoryRequest,
 } from '../shared.types'
 
 export function useAllCategories() {

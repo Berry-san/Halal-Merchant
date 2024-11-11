@@ -4,17 +4,22 @@ import Switch from '../atoms/Switch'
 import { Product } from '../../shared.types'
 import { Column } from './Table'
 import Pagination from '../atoms/Pagination/Pagination'
+import ActionDropdown from '../atoms/ActionDropdown' // Updated import to use ActionDropdown
 
 interface ProductTableProps {
   columns: Column[]
   data: Product[]
-  handleToggleStatus: (id: number, newStatus: string) => void
+  handleToggleStatus: (id: number | string, newStatus: string) => void
+  handleEditProduct: (product: Product) => void
+  handleDeleteProduct: (productId: number | string) => void
 }
 
 const ProductTable: React.FC<ProductTableProps> = ({
   columns,
   data,
   handleToggleStatus,
+  handleEditProduct,
+  handleDeleteProduct,
 }) => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const usersPerPage: number = 10
@@ -25,13 +30,12 @@ const ProductTable: React.FC<ProductTableProps> = ({
 
   const indexOfLastUser: number = currentPage * usersPerPage
   const indexOfFirstUser: number = indexOfLastUser - usersPerPage
-
   const currentUsers = data.slice(indexOfFirstUser, indexOfLastUser)
 
   return (
     <>
-      <div className="overflow-x-auto rounded-lg border border-gray-200">
-        <table className="min-w-full border-collapse">
+      <div className="z-10 overflow-x-auto border border-gray-200 rounded-lg ">
+        <table className="min-w-full border-collapse table-auto">
           <thead>
             <tr className="border-b">
               {columns.map((column) => (
@@ -39,17 +43,26 @@ const ProductTable: React.FC<ProductTableProps> = ({
                   {column.header}
                 </th>
               ))}
+              <th className="px-6 py-3"> </th>
             </tr>
           </thead>
           <tbody>
             {currentUsers.length > 0 ? (
               currentUsers.map((product) => (
                 <tr key={product.product_id} className="text-left border-b">
-                  <td className="px-6 py-4 flex items-center">
+                  <td className="flex items-center px-6 py-4">
                     <img
-                      src={product.product_picture.picture1}
+                      src={
+                        typeof product?.product_picture?.picture1 === 'string'
+                          ? product.product_picture.picture1
+                          : product?.product_picture?.picture1
+                          ? URL.createObjectURL(
+                              product.product_picture.picture1
+                            )
+                          : undefined
+                      }
                       alt={product.product_name}
-                      className="w-12 h-12 rounded mr-4"
+                      className="w-12 h-12 mr-4 rounded"
                     />
                     <div>
                       <div className="text-sm font-semibold">
@@ -78,16 +91,23 @@ const ProductTable: React.FC<ProductTableProps> = ({
                       onToggle={() =>
                         handleToggleStatus(
                           product.product_id,
-                          product.status === '1' ? '0' : '1' // Toggle between 1 (active) and 0 (inactive)
+                          product.status === '1' ? '0' : '1' // Toggle between '1' (active) and '0' (inactive)
                         )
                       }
+                    />
+                  </td>
+                  <td className="px-6 py-2">
+                    <ActionDropdown
+                      onEdit={() => handleEditProduct(product)}
+                      onDelete={() => handleDeleteProduct(product.product_id)}
+                      disabled={false} // optional
                     />
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td className="font-bold px-4" colSpan={columns.length}>
+                <td className="px-4 font-bold" colSpan={columns.length}>
                   No data available
                 </td>
               </tr>
