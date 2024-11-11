@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useMerchantStore } from '../../store/useMerchantStore'
 
 const getGreeting = (): string => {
   const now = new Date()
@@ -15,6 +16,7 @@ const getGreeting = (): string => {
 
 const Greeting: React.FC = () => {
   const [greeting, setGreeting] = useState<string>(getGreeting())
+  const { merchant } = useMerchantStore()
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -24,7 +26,11 @@ const Greeting: React.FC = () => {
     return () => clearInterval(interval)
   }, [])
 
-  return <h2 className="font-mono text-lg font-medium">{greeting}, Admin</h2>
+  return (
+    <h2 className="font-mono text-lg font-medium">
+      {greeting}, {merchant?.names}
+    </h2>
+  )
 }
 
 export default Greeting
