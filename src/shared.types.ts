@@ -83,6 +83,7 @@ export interface MerchantRegistration {
   phonenumber: string
   merchant_business_name: string
   providus_account_no?: string
+  merchantId?: string | number
   status?: number
 }
 
@@ -199,6 +200,7 @@ export interface LoginBody {
 // Response structure from login
 export interface Merchant {
   merchant_id: number
+  // merchantId?: string | number
   names: string
   merchant_business_name: string
   gender: string

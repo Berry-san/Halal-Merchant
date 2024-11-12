@@ -17,7 +17,7 @@ export const merchantService = {
     merchantData: MerchantRegistration
   ): Promise<Merchant> {
     const response = await apiBase.post(`register_merchant`, merchantData)
-    return response.data
+    return response.data.merchantDetails
   },
 
   // Fetch merchant details

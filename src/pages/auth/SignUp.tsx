@@ -51,6 +51,7 @@ const Signup: React.FC = () => {
         .oneOf([Yup.ref('password')], 'Passwords must match')
         .required('Confirm password is required'),
     }),
+
     // onSubmit: async () => {
     //   setLoading(true)
 
@@ -115,6 +116,16 @@ const Signup: React.FC = () => {
         }
       )
     },
+  })
+
+  console.log({
+    names: signupValues.values.names,
+    gender: signupValues.values.gender,
+    email: signupValues.values.emailAddress,
+    address: signupValues.values.address,
+    phonenumber: signupValues.values.phonenumber,
+    password: signupValues.values.password,
+    merchant_business_name: signupValues.values.merchant_business_name,
   })
 
   return (
@@ -191,10 +202,11 @@ const Signup: React.FC = () => {
                       onBlur={signupValues.handleBlur}
                       className="w-full px-5 py-3 border rounded-md focus:outline-none"
                     >
-                      <option disabled>--</option>
+                      <option value="" disabled>
+                        Select Gender
+                      </option>
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
-                      {/* Add more options as needed */}
                     </select>
                     {signupValues.touched.gender &&
                       signupValues.errors.gender && (
