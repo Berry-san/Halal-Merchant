@@ -37,12 +37,10 @@ export function useUpdateProduct() {
   const queryClient = useQueryClient()
   return useMutation(
     ({
-      productId,
       updateData,
     }: {
-      productId: number | string
       updateData: UpdateProductRequest | FormData // Accept both types
-    }) => productService.updateProduct(productId, updateData), // Pass the data directly
+    }) => productService.updateProduct(updateData), // Pass the data directly
     {
       onSuccess: () => {
         queryClient.invalidateQueries('productsList') // Refresh product list

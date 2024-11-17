@@ -7,15 +7,6 @@ import { useMerchantStore } from '../../store/useMerchantStore'
 const Layout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
   const navigate = useNavigate()
-  //   const { user } = useAuthStore((state) => ({
-  //     user: state.user,
-  //   }))
-
-  //   const authChecker = user?.isAuthenticated
-
-  //   useEffect(() => {
-  //     if (!authChecker) navigate('/login')
-  //   }, [authChecker, navigate])
 
   const { merchant } = useMerchantStore()
 

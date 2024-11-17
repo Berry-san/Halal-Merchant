@@ -12,6 +12,7 @@ import { Category, Subcategory } from '../shared.types'
 import { useMerchantStore } from '../store/useMerchantStore'
 import { useAddProduct } from '../hooks/useProducts'
 import { useNavigate } from 'react-router-dom'
+import BackButton from '../components/atoms/BackButton'
 
 const AddProduct = () => {
   const navigate = useNavigate()
@@ -29,7 +30,6 @@ const AddProduct = () => {
 
   // State for storing the uploaded file
   const [uploadedImage, setUploadedImage] = useState<File | null>(null)
-  console.log(uploadedImage)
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
@@ -91,33 +91,13 @@ const AddProduct = () => {
       addProductMutation.mutate(formData, {
         onSuccess: () => {
           toast.success('Product added successfully!')
-          navigate('/products') // Navigate only on success
+          navigate('/products')
         },
         onError: (error) => {
           console.error('Failed to add product:', error)
         },
       })
     },
-    // onSubmit: (values) => {
-    //   const productData: AddProductRequest = {
-    //     productName: values.productName,
-    //     shortProductName: values.shortProductName,
-    //     productPrice: parseFloat(values.productPrice),
-    //     productDescription: values.productDescription,
-    //     productModel: values.productModel,
-    //     productColor: values.productColor,
-    //     productQuantity: values.productQuantity,
-    //     productPictures: uploadedImage!,
-    //     expiryDate: new Date(values.expiryDate),
-    //     categoryId: parseInt(values.productCategory),
-    //     subCategoryId: parseInt(values.productSubCategory),
-    //     merchantId: 1, // Replace with dynamic merchant ID if needed
-    //     productDiscountPercentage: parseFloat(values.productDiscount),
-    //     vat: parseFloat(values.vat),
-    //   }
-
-    //   addProductMutation.mutate(productData)
-    // },
   })
 
   useEffect(() => {
@@ -128,10 +108,45 @@ const AddProduct = () => {
 
   return (
     <div>
-      <h2>Product Information</h2>
+      <div className="flex space-x-4">
+        <BackButton />
+        <h2 className="text-xl font-bold">Add Product</h2>
+      </div>
+      <h2 className="mt-4">Product Information</h2>
       <form onSubmit={formik.handleSubmit}>
         <div className="grid grid-cols-5 gap-5 mt-2">
-          <section className="col-span-5 p-4 border rounded lg:col-span-3">
+          <section className="col-span-5 lg:col-span-2 order-1 lg:order-2">
+            <div className="p-4 border rounded">
+              <h3>Product Image</h3>
+              <div className="flex items-center justify-center w-full">
+                <label
+                  htmlFor="dropzone-file"
+                  className="flex flex-col items-center justify-center w-full"
+                >
+                  {uploadedImage ? (
+                    <img
+                      src={URL.createObjectURL(uploadedImage)}
+                      alt="Uploaded Preview"
+                      className="object-fill w-full h-64 rounded-lg"
+                    />
+                  ) : null}
+                  <p className="w-full py-4 mt-2 text-center text-gray-500 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                    {uploadedImage
+                      ? 'Change Product Image'
+                      : 'Upload Product Image'}
+                  </p>
+                  <input
+                    id="dropzone-file"
+                    type="file"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                  />
+                </label>
+              </div>
+            </div>
+          </section>
+          <section className="col-span-5 p-4 border rounded lg:col-span-3 order-2 lg:order-1">
             <h3>General Information</h3>
             <div className="mt-2">
               <div className="flex flex-col gap-5 space-y-5">
@@ -183,7 +198,7 @@ const AddProduct = () => {
                     </select>
                     {formik.touched.productCategory &&
                       formik.errors.productCategory && (
-                        <div className="text-red-600">
+                        <div className="text-red-600 text-xs">
                           {formik.errors.productCategory}
                         </div>
                       )}
@@ -215,7 +230,7 @@ const AddProduct = () => {
                     </select>
                     {formik.touched.productSubCategory &&
                       formik.errors.productSubCategory && (
-                        <div className="text-red-600">
+                        <div className="text-red-600 text-xs">
                           {formik.errors.productSubCategory}
                         </div>
                       )}
@@ -241,6 +256,7 @@ const AddProduct = () => {
                     <InputField
                       label="Product Price"
                       name="productPrice"
+                      placeholder="100,000"
                       value={formik.values.productPrice}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
@@ -314,38 +330,6 @@ const AddProduct = () => {
                     />
                   </div>
                 </section>
-              </div>
-            </div>
-          </section>
-
-          <section className="col-span-2">
-            <div className="p-4 border rounded">
-              <h3>Product Image</h3>
-              <div className="flex items-center justify-center w-full">
-                <label
-                  htmlFor="dropzone-file"
-                  className="flex flex-col items-center justify-center w-full"
-                >
-                  {uploadedImage ? (
-                    <img
-                      src={URL.createObjectURL(uploadedImage)}
-                      alt="Uploaded Preview"
-                      className="object-fill w-full h-64 rounded-lg"
-                    />
-                  ) : null}
-                  <p className="w-full py-4 mt-2 text-center text-gray-500 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                    {uploadedImage
-                      ? 'Change Product Image'
-                      : 'Upload Product Image'}
-                  </p>
-                  <input
-                    id="dropzone-file"
-                    type="file"
-                    className="hidden"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                  />
-                </label>
               </div>
             </div>
           </section>

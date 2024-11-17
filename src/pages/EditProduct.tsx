@@ -11,10 +11,13 @@ import {
 import { useProductDetails, useUpdateProduct } from '../hooks/useProducts'
 import { Category, Subcategory } from '../shared.types'
 import BackButton from '../components/atoms/BackButton'
+import { getProductImageURL } from '../utils/getProductImageURL'
+// import { useMerchantStore } from '../store/useMerchantStore'
 
 const EditProduct: React.FC = () => {
   const { productId } = useParams<{ productId: string }>()
   const navigate = useNavigate()
+
   const { data: categories } = useAllCategories()
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | string>(
     ''
@@ -29,6 +32,25 @@ const EditProduct: React.FC = () => {
 
   // Image preview state
   const [imagePreview, setImagePreview] = useState<string | undefined>()
+  const [newImage, setNewImage] = useState<File | null>(null)
+
+  // Handle new image selection
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      setNewImage(file)
+      setImagePreview(URL.createObjectURL(file)) // Update preview
+    }
+  }
+
+  useEffect(() => {
+    if (productDetails) {
+      setSelectedCategoryId(productDetails.category_id)
+      // Set the existing image URL for preview if no new image is selected
+      if (!newImage)
+        setImagePreview(getProductImageURL(productDetails.product_picture))
+    }
+  }, [productDetails, newImage])
 
   // Initialize Formik
   const formik = useFormik({
@@ -36,39 +58,50 @@ const EditProduct: React.FC = () => {
     initialValues: {
       productName: productDetails?.product_name || '',
       productShortName: productDetails?.short_product_name || '',
+      merchantId: productDetails?.merchant_id || '',
       productCategory: productDetails?.category_id || '',
       productSubCategory: productDetails?.sub_category_id || '',
       productDescription: productDetails?.product_description || '',
       productPrice: productDetails?.product_price || '',
       vat: productDetails?.vat || '',
       productDiscount: productDetails?.product_discount_percentage || '',
+      productId: productDetails?.product_id || '',
       productModel: productDetails?.product_model || '',
       productColor: productDetails?.product_color || '',
       productQuantity: productDetails?.product_quantity || '',
+      status: productDetails?.status || '',
       expiryDate: productDetails?.expiry_date
         ? productDetails.expiry_date.split('T')[0]
         : '', // Format date to YYYY-MM-DD
     },
     onSubmit: (values) => {
       const formData = new FormData()
-      formData.append('product_name', values.productName || '')
-      formData.append('short_product_name', values.productShortName || '')
-      formData.append('product_price', String(values.productPrice || ''))
-      formData.append('product_description', values.productDescription || '')
-      formData.append('product_model', values.productModel || '')
-      formData.append('product_color', values.productColor || '')
-      formData.append('product_quantity', String(values.productQuantity || ''))
-      formData.append('expiry_date', values.expiryDate || '')
-      formData.append('category_id', values.productCategory || '')
-      formData.append('sub_category_id', values.productSubCategory || '')
+      formData.append('productName', values.productName || '')
+      formData.append('shortProductName', values.productShortName || '')
+      formData.append('merchantId', values.merchantId || '')
+      formData.append('productPrice', String(values.productPrice || ''))
+      formData.append('productDescription', values.productDescription || '')
+      formData.append('productModel', values.productModel || '')
+      formData.append('productColor', values.productColor || '')
+      formData.append('productQuantity', String(values.productQuantity || ''))
+      formData.append('expiryDate', values.expiryDate || '')
+      formData.append('categoryId', values.productCategory || '')
+      formData.append('subCategoryId', values.productSubCategory || '')
       formData.append(
-        'product_discount_percentage',
+        'productDiscountPercentage',
         String(values.productDiscount || '')
       )
       formData.append('vat', String(values.vat || ''))
+      formData.append('status', values.status || '')
+      formData.append('productId', String(values.productId) || '')
+
+      // Append new image if selected
+      if (newImage) {
+        formData.append('productPictures', newImage)
+      }
 
       updateProductMutation.mutate(
-        { productId: productId!, updateData: formData },
+        { updateData: formData },
         {
           onSuccess: () => {
             toast.success('Product updated successfully!')
@@ -82,16 +115,6 @@ const EditProduct: React.FC = () => {
     },
   })
 
-  useEffect(() => {
-    if (productDetails) {
-      setSelectedCategoryId(productDetails.category_id)
-      // Set the existing image URL for preview
-      if (typeof productDetails.product_picture?.picture1 === 'string') {
-        setImagePreview(productDetails.product_picture.picture1)
-      }
-    }
-  }, [productDetails])
-
   return (
     <div>
       <div className="flex space-x-4">
@@ -103,7 +126,32 @@ const EditProduct: React.FC = () => {
       ) : (
         <form onSubmit={formik.handleSubmit}>
           <div className="grid grid-cols-5 gap-5 mt-2">
-            <section className="col-span-5 p-4 border rounded lg:col-span-3">
+            <section className="ccol-span-5 lg:col-span-2 order-1 lg:order-2">
+              <div className="p-4 border rounded">
+                <h3>Product Image</h3>
+                <div className="flex items-center justify-center w-full">
+                  <label className="flex flex-col items-center justify-center w-full">
+                    {imagePreview && (
+                      <img
+                        src={imagePreview}
+                        alt="Product Image"
+                        className="object-fill w-full h-64 rounded-lg"
+                      />
+                    )}
+                    <p className="w-full py-4 mt-2 text-center text-gray-500 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                      {newImage ? 'Change Image' : 'Upload New Image'}
+                    </p>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+              </div>
+            </section>
+            <section className="col-span-5 p-4 border rounded lg:col-span-3 order-2 lg:order-1">
               <h3>General Information</h3>
               <div className="mt-2">
                 <div className="flex flex-col gap-5 space-y-5">
@@ -283,8 +331,17 @@ const EditProduct: React.FC = () => {
                         label="Expiry Date"
                         name="expiryDate"
                         type="date"
-                        value={formik.values.expiryDate}
-                        onChange={formik.handleChange}
+                        value={
+                          formik.values.expiryDate
+                            ? new Date(formik.values.expiryDate)
+                                .toISOString()
+                                .split('T')[0]
+                            : ''
+                        }
+                        onChange={(e) => {
+                          const formattedDate = e.target.value // This is already in 'yyyy-mm-dd' format
+                          formik.setFieldValue('expiryDate', formattedDate)
+                        }}
                         onBlur={formik.handleBlur}
                         error={
                           formik.touched.expiryDate && formik.errors.expiryDate
@@ -292,23 +349,6 @@ const EditProduct: React.FC = () => {
                       />
                     </div>
                   </section>
-                </div>
-              </div>
-            </section>
-
-            <section className="col-span-2">
-              <div className="p-4 border rounded">
-                <h3>Product Image</h3>
-                <div className="flex items-center justify-center w-full">
-                  <label className="flex flex-col items-center justify-center w-full">
-                    {imagePreview && (
-                      <img
-                        src={imagePreview}
-                        alt="Product Image"
-                        className="object-fill w-full h-64 rounded-lg"
-                      />
-                    )}
-                  </label>
                 </div>
               </div>
             </section>

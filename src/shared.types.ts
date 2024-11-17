@@ -46,6 +46,7 @@ export interface AddProductRequest {
   merchantId: number
   productDiscountPercentage: number
   vat: number
+  productId: string
 }
 
 // Update product request type

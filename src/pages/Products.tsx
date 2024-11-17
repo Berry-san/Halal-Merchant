@@ -10,6 +10,8 @@ import {
 } from '../hooks/useProducts'
 import { Product } from '../shared.types'
 import { useNavigate } from 'react-router-dom'
+import { getProductImageURL } from '../utils/getProductImageURL'
+
 // import paths from '../routes/paths'
 
 // const statusOptions = [
@@ -55,11 +57,47 @@ const Products: React.FC = () => {
     productId: number | string,
     newStatus: string
   ) => {
-    const formData = new FormData()
-    formData.append('status', newStatus)
+    // Find the full product details from the products list
+    const productToUpdate = products.find(
+      (product) => product.product_id === productId
+    )
 
+    if (!productToUpdate) return // If product is not found, exit
+
+    // Create a new FormData object and populate it with the current product details
+    const formData = new FormData()
+    formData.append('productId', String(productToUpdate.product_id))
+    formData.append('productName', productToUpdate.product_name || '')
+    formData.append(
+      'shortProductName',
+      productToUpdate.short_product_name || ''
+    )
+    formData.append('merchantId', productToUpdate.merchant_id || '')
+    formData.append('categoryId', productToUpdate.category_id || '')
+    formData.append('subCategoryId', productToUpdate.sub_category_id || '')
+    formData.append(
+      'productDescription',
+      productToUpdate.product_description || ''
+    )
+    formData.append('productPrice', productToUpdate.product_price || '')
+    formData.append('productModel', productToUpdate.product_model || '')
+    formData.append('productColor', productToUpdate.product_color || '')
+    formData.append('productQuantity', String(productToUpdate.product_quantity))
+    formData.append('vat', String(productToUpdate.vat || ''))
+    formData.append(
+      'productDiscountPercentage',
+      String(productToUpdate.product_discount_percentage || '')
+    )
+    formData.append('expiryDate', productToUpdate.expiry_date || '')
+    formData.append('status', newStatus) // Update the status field
+
+    const productImageURL = getProductImageURL(productToUpdate.product_picture)
+    if (productImageURL) {
+      formData.append('productPicture', productImageURL)
+    }
+
+    // Submit the updated product data
     updateProductMutation.mutate({
-      productId,
       updateData: formData,
     })
   }

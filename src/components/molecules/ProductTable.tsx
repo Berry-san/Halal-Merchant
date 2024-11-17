@@ -5,6 +5,7 @@ import { Product } from '../../shared.types'
 import { Column } from './Table'
 import Pagination from '../atoms/Pagination/Pagination'
 import ActionDropdown from '../atoms/ActionDropdown' // Updated import to use ActionDropdown
+import { getProductImageURL } from '../../utils/getProductImageURL'
 
 interface ProductTableProps {
   columns: Column[]
@@ -52,15 +53,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
                 <tr key={product.product_id} className="text-left border-b">
                   <td className="flex items-center px-6 py-4">
                     <img
-                      src={
-                        typeof product?.product_picture?.picture1 === 'string'
-                          ? product.product_picture.picture1
-                          : product?.product_picture?.picture1
-                          ? URL.createObjectURL(
-                              product.product_picture.picture1
-                            )
-                          : undefined
-                      }
+                      src={getProductImageURL(product.product_picture)}
                       alt={product.product_name}
                       className="w-12 h-12 mr-4 rounded"
                     />

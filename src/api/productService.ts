@@ -64,7 +64,6 @@ export const productService = {
 
   // Update an existing product by ID
   async updateProduct(
-    productId: number | string,
     updateData: FormData | UpdateProductRequest
   ): Promise<void> {
     try {
@@ -99,15 +98,11 @@ export const productService = {
         }
       }
 
-      await apiBase.post(
-        `${BASE_URL}/update_product/${productId}`,
-        dataToSend,
-        {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        }
-      )
+      await apiBase.put(`${BASE_URL}/update_product`, dataToSend, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
     } catch (error) {
-      console.error(`Error updating product with ID ${productId}:`, error)
+      console.error(`Error updating product:`, error)
       throw new Error('Could not update product')
     }
   },
