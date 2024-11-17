@@ -118,16 +118,17 @@ const ActionDropdown: React.FC<ActionDropdownProps> = ({
   )
 
   return (
-    <div className="relative inline-block" ref={dropdownRef}>
+    <div className="inline-block" ref={dropdownRef}>
       {/* Ellipsis Button */}
       <button
         type="button"
         onClick={() => !disabled && setIsOpen(!isOpen)}
-        className={`inline-flex p-1 rounded-full transition-colors ${
-          disabled
-            ? 'opacity-50 cursor-not-allowed'
-            : 'hover:bg-gray-100 cursor-pointer'
-        }`}
+        // className={`inline-flex p-1 rounded-full transition-colors ${
+        //   disabled
+        //     ? 'opacity-50 cursor-not-allowed'
+        //     : 'hover:bg-gray-100 cursor-pointer'
+        // }`}
+        className="inline-flex items-center justify-center"
         id="options-menu"
         aria-haspopup="true"
         aria-expanded="true"
@@ -138,8 +139,8 @@ const ActionDropdown: React.FC<ActionDropdownProps> = ({
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 z-50 w-32 mt-1 bg-white border border-gray-200 rounded-md shadow-lg">
-          <div className="py-1">
+        <div className="absolute right-0 z-20 w-32 mt-1 bg-white border border-gray-200 rounded-md shadow-lg">
+          <div>
             <DropdownButton
               onClick={() => {
                 onEdit()

@@ -1,7 +1,6 @@
 const paths = {
   dashboard: '/',
   products: '/products',
-  categories: '/categories',
   addProduct: '/products/add-product',
   editProduct: '/products/edit-product/:productId',
   orders: '/orders',

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import {
   useAllCategories,
   useSubcategoriesByCategoryId,
@@ -11,108 +11,9 @@ import {
 } from '../hooks/useCategory'
 import { Category, Subcategory } from '../shared.types'
 import Modal from '../components/molecules/Modal'
+import InputField from '../components/atoms/InputField'
 
 const Categories: React.FC = () => {
-  //   const {
-  //     data: categories,
-  //     isLoading: isLoadingCategories,
-  //     error: categoriesError,
-  //   } = useAllCategories()
-  //   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
-  //     null
-  //   )
-  //   const {
-  //     data: subcategories,
-  //     isLoading: isLoadingSubcategories,
-  //     error: subcategoriesError,
-  //   } = useSubcategoriesByCategoryId(selectedCategoryId as number)
-
-  //   const [editCategoryId, setEditCategoryId] = useState<number | null>(null)
-  //   const [editSubcategoryId, setEditSubcategoryId] = useState<number | null>(
-  //     null
-  //   )
-  //   const [categoryFormData, setCategoryFormData] = useState({
-  //     categoryName: '',
-  //     description: '',
-  //   })
-  //   const [subcategoryFormData, setSubcategoryFormData] = useState({
-  //     subcategoryName: '',
-  //     description: '',
-  //   })
-  //   const [isCategoryModalVisible, setIsCategoryModalVisible] = useState(false)
-  //   const [isSubcategoryModalVisible, setIsSubcategoryModalVisible] =
-  //     useState(false)
-
-  //   const updateCategoryMutation = useUpdateCategory(editCategoryId as number)
-  //   const updateSubcategoryMutation = useUpdateSubcategory(
-  //     editSubcategoryId as number
-  //   )
-
-  //   const deleteCategoryMutation = useDeleteCategory()
-  //   const deleteSubcategoryMutation = useDeleteSubcategory()
-
-  //   const handleEditCategory = (category: Category) => {
-  //     setEditCategoryId(category.category_id)
-  //     setCategoryFormData({
-  //       categoryName: category.category_name,
-  //       description: category.description,
-  //     })
-  //     setIsCategoryModalVisible(true)
-  //   }
-
-  //   const handleEditSubcategory = (subcategory: Subcategory) => {
-  //     setEditSubcategoryId(subcategory.subcategory_id)
-  //     setSubcategoryFormData({
-  //       subcategoryName: subcategory.subcategory_name,
-  //       description: subcategory.description,
-  //     })
-  //     setIsSubcategoryModalVisible(true)
-  //   }
-
-  //   const handleUpdateCategory = () => {
-  //     if (editCategoryId) {
-  //       updateCategoryMutation.mutate(categoryFormData, {
-  //         onSuccess: () => {
-  //           setIsCategoryModalVisible(false)
-  //           setEditCategoryId(null)
-  //         },
-  //       })
-  //     }
-  //   }
-
-  //   const handleUpdateSubcategory = () => {
-  //     if (editSubcategoryId) {
-  //       updateSubcategoryMutation.mutate(subcategoryFormData, {
-  //         onSuccess: () => {
-  //           setIsSubcategoryModalVisible(false)
-  //           setEditSubcategoryId(null)
-  //         },
-  //       })
-  //     }
-  //   }
-
-  //   const handleDeleteCategory = (categoryId: number) => {
-  //     deleteCategoryMutation.mutate(categoryId, {
-  //       onSuccess: () => {
-  //         if (selectedCategoryId === categoryId) setSelectedCategoryId(null)
-  //       },
-  //     })
-  //   }
-
-  //   const handleDeleteSubcategory = (subcategoryId: number) => {
-  //     deleteSubcategoryMutation.mutate(subcategoryId)
-  //   }
-
-  //   const handleCategoryClick = (categoryId: number) => {
-  //     setSelectedCategoryId((prevId) =>
-  //       prevId === categoryId ? null : categoryId
-  //     )
-  //   }
-
-  //   if (isLoadingCategories) return <div>Loading categories...</div>
-  //   if (categoriesError)
-  //     return <div>Error loading categories: {categoriesError.message}</div>
-
   const {
     data: categories,
     isLoading: isLoadingCategories,
@@ -125,7 +26,7 @@ const Categories: React.FC = () => {
   const {
     data: subcategories,
     isLoading: isLoadingSubcategories,
-    error: subcategoriesError,
+    // error: subcategoriesError,
   } = useSubcategoriesByCategoryId(selectedCategoryId as number)
 
   const [editCategoryId, setEditCategoryId] = useState<number | null>(null)
@@ -163,8 +64,6 @@ const Categories: React.FC = () => {
   const updateSubcategoryMutation = useUpdateSubcategory(
     editSubcategoryId as number
   )
-  const deleteCategoryMutation = useDeleteCategory()
-  const deleteSubcategoryMutation = useDeleteSubcategory()
 
   const handleEditCategory = (category: Category) => {
     setEditCategoryId(category.category_id)
@@ -206,16 +105,42 @@ const Categories: React.FC = () => {
     }
   }
 
+  const deleteCategoryMutation = useDeleteCategory()
+  const deleteSubcategoryMutation = useDeleteSubcategory()
+
+  const [showConfirmation, setShowConfirmation] = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState<{
+    id: number
+    type: 'category' | 'subcategory'
+  } | null>(null)
+
+  const confirmationRef = useRef<HTMLDivElement>(null)
+
   const handleDeleteCategory = (categoryId: number) => {
-    deleteCategoryMutation.mutate(categoryId, {
-      onSuccess: () => {
-        if (selectedCategoryId === categoryId) setSelectedCategoryId(null)
-      },
-    })
+    setDeleteTarget({ id: categoryId, type: 'category' })
+    setShowConfirmation(true)
   }
 
   const handleDeleteSubcategory = (subcategoryId: number) => {
-    deleteSubcategoryMutation.mutate(subcategoryId)
+    setDeleteTarget({ id: subcategoryId, type: 'subcategory' })
+    setShowConfirmation(true)
+  }
+
+  const confirmDelete = () => {
+    if (deleteTarget) {
+      if (deleteTarget.type === 'category') {
+        deleteCategoryMutation.mutate(deleteTarget.id, {
+          onSuccess: () => {
+            if (selectedCategoryId === deleteTarget.id)
+              setSelectedCategoryId(null)
+          },
+        })
+      } else if (deleteTarget.type === 'subcategory') {
+        deleteSubcategoryMutation.mutate(deleteTarget.id)
+      }
+    }
+    setShowConfirmation(false)
+    setDeleteTarget(null)
   }
 
   const handleCategoryClick = (categoryId: number) => {
@@ -251,7 +176,6 @@ const Categories: React.FC = () => {
   if (isLoadingCategories) return <div>Loading categories...</div>
   if (categoriesError)
     return <div>Error loading categories: {categoriesError.message}</div>
-  console.error(subcategoriesError)
 
   return (
     <div>
@@ -297,8 +221,8 @@ const Categories: React.FC = () => {
               <ul className="ml-4">
                 {isLoadingSubcategories ? (
                   <div>Loading subcategories...</div>
-                ) : (
-                  subcategories?.map((sub) => (
+                ) : subcategories?.length ? (
+                  subcategories.map((sub) => (
                     <li key={sub.subcategory_id} className="space-x-5">
                       <span>{sub.subcategory_name}</span>
                       <button
@@ -317,6 +241,8 @@ const Categories: React.FC = () => {
                       </button>
                     </li>
                   ))
+                ) : (
+                  <li className="text-gray-500">No subcategories available</li>
                 )}
               </ul>
             )}
@@ -328,9 +254,12 @@ const Categories: React.FC = () => {
       <Modal
         isVisible={isCategoryModalVisible}
         onClose={() => setIsCategoryModalVisible(false)}
+        className="p-4"
       >
         <h3>Edit Category</h3>
-        <input
+        <InputField
+          label="Category Name"
+          name="categoryName"
           value={categoryFormData.categoryName}
           onChange={(e) =>
             setCategoryFormData({
@@ -339,7 +268,9 @@ const Categories: React.FC = () => {
             })
           }
         />
-        <input
+        <InputField
+          label="Description"
+          name="description"
           value={categoryFormData.description}
           onChange={(e) =>
             setCategoryFormData({
@@ -348,16 +279,24 @@ const Categories: React.FC = () => {
             })
           }
         />
-        <button onClick={handleUpdateCategory}>Save</button>
+        <button
+          onClick={handleUpdateCategory}
+          className="px-4 py-2 mt-4 text-white rounded bg-secondary"
+        >
+          Save
+        </button>
       </Modal>
 
       {/* Subcategory Edit Modal */}
       <Modal
         isVisible={isSubcategoryModalVisible}
         onClose={() => setIsSubcategoryModalVisible(false)}
+        className="p-4"
       >
         <h3>Edit Subcategory</h3>
-        <input
+        <InputField
+          label="Subcategory Name"
+          name="subcategoryName"
           value={subcategoryFormData.subcategoryName}
           onChange={(e) =>
             setSubcategoryFormData({
@@ -366,7 +305,9 @@ const Categories: React.FC = () => {
             })
           }
         />
-        <input
+        <InputField
+          label="Description"
+          name="description"
           value={subcategoryFormData.description}
           onChange={(e) =>
             setSubcategoryFormData({
@@ -375,7 +316,12 @@ const Categories: React.FC = () => {
             })
           }
         />
-        <button onClick={handleUpdateSubcategory}>Save</button>
+        <button
+          onClick={handleUpdateSubcategory}
+          className="px-4 py-2 mt-4 text-white rounded bg-secondary"
+        >
+          Save
+        </button>
       </Modal>
 
       {/* Add Category Modal */}
@@ -383,6 +329,7 @@ const Categories: React.FC = () => {
         <Modal
           isVisible={isAddCategoryModalVisible}
           onClose={() => setIsAddCategoryModalVisible(false)}
+          className="p-4"
         >
           <h3 className="mb-4 text-lg font-bold">Add Category</h3>
           <form onSubmit={(e) => e.preventDefault()}>
@@ -425,6 +372,7 @@ const Categories: React.FC = () => {
         <Modal
           isVisible={isAddSubcategoryModalVisible}
           onClose={() => setIsAddSubcategoryModalVisible(false)}
+          className="p-4"
         >
           <h3 className="mb-4 text-lg font-bold">Add Subcategory</h3>
           <form onSubmit={(e) => e.preventDefault()}>
@@ -478,6 +426,38 @@ const Categories: React.FC = () => {
             </button>
           </form>
         </Modal>
+      )}
+
+      {/* Delete Confirmation Dialog */}
+      {showConfirmation && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
+          <div
+            ref={confirmationRef}
+            className="relative max-w-sm p-6 mx-4 bg-white rounded-lg"
+          >
+            <h3 className="mb-4 text-lg font-semibold">Confirm Delete</h3>
+            <p className="mb-6 text-gray-600">
+              Are you sure you want to delete this item? This action cannot be
+              undone.
+            </p>
+            <div className="flex justify-end space-x-3">
+              <button
+                type="button"
+                onClick={() => setShowConfirmation(false)}
+                className="px-4 py-2 text-sm text-gray-600 rounded hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmDelete}
+                className="px-4 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

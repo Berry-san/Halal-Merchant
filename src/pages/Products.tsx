@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import SelectDropdown from '../components/atoms/SelectDropdown'
+// import SelectDropdown from '../components/atoms/SelectDropdown'
 import SearchBar from '../components/molecules/SearchBar'
 import ProductTable from '../components/molecules/ProductTable'
 import { Column } from '../components/molecules/Table'
@@ -12,17 +12,17 @@ import { Product } from '../shared.types'
 import { useNavigate } from 'react-router-dom'
 // import paths from '../routes/paths'
 
-const statusOptions = [
-  { label: 'Accepted', value: 'accepted' },
-  { label: 'Shipped', value: 'shipped' },
-  { label: 'Delivered', value: 'delivered' },
-  { label: 'Received', value: 'received' },
-]
+// const statusOptions = [
+//   { label: 'Accepted', value: 'accepted' },
+//   { label: 'Shipped', value: 'shipped' },
+//   { label: 'Delivered', value: 'delivered' },
+//   { label: 'Received', value: 'received' },
+// ]
 
 const Products: React.FC = () => {
   const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedStatus, setSelectedStatus] = useState('')
+  // const [selectedStatus, setSelectedStatus] = useState('')
 
   // Fetch products from the API using the hook
   const { data: products = [], isLoading, error } = useProductsList()
@@ -74,10 +74,11 @@ const Products: React.FC = () => {
     const matchesSearch = product.product_name
       .toLowerCase()
       .includes(searchTerm.toLowerCase())
-    const matchesStatus = selectedStatus
-      ? product.category_name === selectedStatus
-      : true
-    return matchesSearch && matchesStatus
+    // const matchesStatus = selectedStatus
+    //   ? product.category_name === selectedStatus
+    //   : true
+    // return matchesSearch && matchesStatus
+    return matchesSearch
   })
 
   if (isLoading) return <div>Loading products...</div>
@@ -102,20 +103,21 @@ const Products: React.FC = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <SelectDropdown
+        {/* <SelectDropdown
           options={statusOptions}
           value={selectedStatus}
           onChange={(e) => setSelectedStatus(e.target.value)}
+        /> */}
+      </div>
+      <div className="relative">
+        <ProductTable
+          columns={columns}
+          data={filteredProducts}
+          handleToggleStatus={handleToggleStatus}
+          handleEditProduct={handleEditProduct}
+          handleDeleteProduct={handleDeleteProduct} // Pass delete handler
         />
       </div>
-
-      <ProductTable
-        columns={columns}
-        data={filteredProducts}
-        handleToggleStatus={handleToggleStatus}
-        handleEditProduct={handleEditProduct}
-        handleDeleteProduct={handleDeleteProduct} // Pass delete handler
-      />
     </div>
   )
 }

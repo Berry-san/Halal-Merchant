@@ -46,16 +46,7 @@ const UpdatePassword = () => {
       <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <InputField
-            label="Password"
-            name="pin"
-            type="password"
-            value={formik.values.pin}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.pin && formik.errors.pin}
-          />
-          <InputField
-            label="Confirm Password"
+            label="Old Password"
             name="confirmPassword"
             type="password"
             value={formik.values.confirmPassword}
@@ -64,6 +55,15 @@ const UpdatePassword = () => {
             error={
               formik.touched.confirmPassword && formik.errors.confirmPassword
             }
+          />
+          <InputField
+            label="New Password"
+            name="pin"
+            type="password"
+            value={formik.values.pin}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.pin && formik.errors.pin}
           />
         </div>
         <div>

@@ -8,7 +8,6 @@ import Products from '../pages/Products'
 import paths from './paths'
 import Orders from '../pages/Orders'
 import Account from '../pages/Account'
-import Categories from '../pages/Categories'
 import TrackOrder from '../pages/TrackOrder'
 import EditProduct from '../pages/EditProduct'
 import { useMerchantStore } from '../store/useMerchantStore'
@@ -17,8 +16,6 @@ function AppRoutes() {
   const { merchant } = useMerchantStore()
 
   const authChecker = merchant?.isAuthenticated
-  console.log(authChecker)
-  console.log(merchant)
 
   return (
     <Routes>
@@ -38,7 +35,6 @@ function AppRoutes() {
         <Route path={paths.addProduct} element={<AddProduct />} />
         <Route path={paths.editProduct} element={<EditProduct />} />
         <Route path={paths.account} element={<Account />} />
-        <Route path={paths.categories} element={<Categories />} />
       </Route>
       <Route index element={<Navigate to={paths.login} />} />
       {/* Optional catch-all route */}

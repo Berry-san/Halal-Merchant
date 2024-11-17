@@ -24,15 +24,9 @@ export const MerchantSidebarLinks = [
     id: 3,
   },
   {
-    label: 'Categories',
-    href: paths.categories,
-    icon: accountIcon,
-    id: 4,
-  },
-  {
     label: 'My Account',
     href: paths.account,
     icon: accountIcon,
-    id: 5,
+    id: 4,
   },
 ]

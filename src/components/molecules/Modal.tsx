@@ -4,9 +4,15 @@ interface ModalProps {
   isVisible: boolean
   onClose: () => void
   children: ReactNode
+  className?: string // Accept additional class names as a prop
 }
 
-const Modal: React.FC<ModalProps> = ({ isVisible, onClose, children }) => {
+const Modal: React.FC<ModalProps> = ({
+  isVisible,
+  onClose,
+  children,
+  className,
+}) => {
   if (!isVisible) return null
 
   const handleClose = (e: MouseEvent<HTMLDivElement>) => {
@@ -21,8 +27,12 @@ const Modal: React.FC<ModalProps> = ({ isVisible, onClose, children }) => {
       id="backdrop"
       onClick={handleClose}
     >
-      <div className="relative flex flex-col max-w-2xl p-4 mx-3 space-y-4 bg-white rounded">
-        <div className="p-4 text-black scroll-black">{children}</div>
+      <div
+        className={`relative flex flex-col w-80 mx-3 space-y-4 bg-white rounded ${
+          className || ''
+        }`}
+      >
+        <div className="text-black">{children}</div>
       </div>
     </div>
   )

@@ -15,6 +15,21 @@ export const productService = {
     }
   },
 
+  // Fetch preoducts by merchantId
+  async fetchProductsByMerchantId(
+    merchantId: number | string
+  ): Promise<Product[]> {
+    try {
+      const response = await apiBase.get(
+        `${BASE_URL}/products_list/${merchantId}`
+      )
+      return response.data.products
+    } catch (error) {
+      console.error('Error fetching products by merchantId:', error)
+      throw new Error('Could not fetch products by merchantId')
+    }
+  },
+
   // Fetch details for a specific product by ID
   async fetchProductDetails(productId: number): Promise<ProductDetails> {
     try {
@@ -39,6 +54,7 @@ export const productService = {
           'Content-Type': 'multipart/form-data',
         },
       })
+      console.log(response.data)
       return response.data
     } catch (error) {
       console.error('Error adding new product:', error)

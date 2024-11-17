@@ -7,11 +7,16 @@ import {
   useAllCategories,
   useSubcategoriesByCategoryId,
 } from '../hooks/useCategory'
-import { useMutation } from 'react-query'
-import { productService } from '../api/productService'
+import { toast } from 'react-toastify'
 import { Category, Subcategory } from '../shared.types'
+import { useMerchantStore } from '../store/useMerchantStore'
+import { useAddProduct } from '../hooks/useProducts'
+import { useNavigate } from 'react-router-dom'
 
 const AddProduct = () => {
+  const navigate = useNavigate()
+  const { merchant } = useMerchantStore()
+
   const { data: categories } = useAllCategories()
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | string>(
     ''
@@ -24,6 +29,7 @@ const AddProduct = () => {
 
   // State for storing the uploaded file
   const [uploadedImage, setUploadedImage] = useState<File | null>(null)
+  console.log(uploadedImage)
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
@@ -31,9 +37,7 @@ const AddProduct = () => {
     }
   }
 
-  const addProductMutation = useMutation((formData: FormData) =>
-    productService.addProduct(formData)
-  )
+  const addProductMutation = useAddProduct()
 
   const formik = useFormik({
     initialValues: {
@@ -56,7 +60,7 @@ const AddProduct = () => {
       productCategory: Yup.string().required('Category is required'),
       productSubCategory: Yup.string().required('Subcategory is required'),
       productDescription: Yup.string().required('Description is required'),
-      productPrice: Yup.number().required('Price is required').positive(),
+      productPrice: Yup.string().required('Price is required'),
       vat: Yup.number().required('VAT is required').positive(),
       productDiscount: Yup.number().required('Discount is required').positive(),
       productModel: Yup.string().required('Model is required'),
@@ -67,6 +71,7 @@ const AddProduct = () => {
     onSubmit: (values) => {
       const formData = new FormData()
       formData.append('productName', values.productName)
+      formData.append('merchantId', String(merchant?.merchant_id))
       formData.append('shortProductName', values.shortProductName)
       formData.append('productPrice', values.productPrice)
       formData.append('productDescription', values.productDescription)
@@ -83,7 +88,15 @@ const AddProduct = () => {
       }
 
       // Send FormData directly
-      addProductMutation.mutate(formData)
+      addProductMutation.mutate(formData, {
+        onSuccess: () => {
+          toast.success('Product added successfully!')
+          navigate('/products') // Navigate only on success
+        },
+        onError: (error) => {
+          console.error('Failed to add product:', error)
+        },
+      })
     },
     // onSubmit: (values) => {
     //   const productData: AddProductRequest = {

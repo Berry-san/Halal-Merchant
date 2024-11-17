@@ -86,7 +86,9 @@ const Order = () => {
         />
       </div>
 
-      <Table columns={columns} data={filteredProducts} />
+      <div className="relative">
+        <Table columns={columns} data={filteredProducts} />
+      </div>
     </div>
   )
 }

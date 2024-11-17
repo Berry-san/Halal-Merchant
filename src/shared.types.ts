@@ -215,6 +215,20 @@ export interface Merchant {
   isAuthenticated?: boolean
 }
 
+// Merchant registration type
+export interface MerchantRegistration {
+  names: string
+  gender: string
+  email: string
+  address: string
+  password: string
+  phonenumber: string
+  merchant_business_name: string
+  providus_account_no?: string
+  merchantId?: string | number
+  status?: number
+}
+
 export interface MerchantComplaintRequest {
   email: string
   merchant_name: string

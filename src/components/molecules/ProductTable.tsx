@@ -34,8 +34,8 @@ const ProductTable: React.FC<ProductTableProps> = ({
 
   return (
     <>
-      <div className="z-10 overflow-x-auto border border-gray-200 rounded-lg ">
-        <table className="min-w-full border-collapse table-auto">
+      <div className="max-w-full overflow-x-auto border border-gray-200 rounded-lg">
+        <table className="w-full table-auto">
           <thead>
             <tr className="border-b">
               {columns.map((column) => (

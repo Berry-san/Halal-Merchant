@@ -9,6 +9,12 @@ export function useProductsList() {
   )
 }
 
+export function useProductListByID(merchantId: number | string) {
+  return useQuery<Product[], Error>(['productsList', merchantId], () =>
+    productService.fetchProductsByMerchantId(merchantId)
+  )
+}
+
 export function useProductDetails(productId: number) {
   return useQuery<ProductDetails, Error>(['productDetails', productId], () =>
     productService.fetchProductDetails(productId)
@@ -19,6 +25,24 @@ export function useAddProduct() {
   const queryClient = useQueryClient()
   return useMutation(
     (productData: FormData) => productService.addProduct(productData),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('productsList') // Refresh product list
+      },
+    }
+  )
+}
+
+export function useUpdateProduct() {
+  const queryClient = useQueryClient()
+  return useMutation(
+    ({
+      productId,
+      updateData,
+    }: {
+      productId: number | string
+      updateData: UpdateProductRequest | FormData // Accept both types
+    }) => productService.updateProduct(productId, updateData), // Pass the data directly
     {
       onSuccess: () => {
         queryClient.invalidateQueries('productsList') // Refresh product list
@@ -86,24 +110,6 @@ export function useAddProduct() {
 //     }
 //   )
 // }
-
-export function useUpdateProduct() {
-  const queryClient = useQueryClient()
-  return useMutation(
-    ({
-      productId,
-      updateData,
-    }: {
-      productId: number | string
-      updateData: UpdateProductRequest | FormData // Accept both types
-    }) => productService.updateProduct(productId, updateData), // Pass the data directly
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('productsList') // Refresh product list
-      },
-    }
-  )
-}
 
 export function useDeleteProduct() {
   const queryClient = useQueryClient()
