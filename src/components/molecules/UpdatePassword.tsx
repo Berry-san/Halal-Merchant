@@ -1,5 +1,4 @@
 import { useFormik } from 'formik'
-import * as Yup from 'yup'
 import { useUpdateMerchantDetails } from '../../hooks/useMerchant'
 import InputField from '../atoms/InputField'
 import { useMerchantStore } from '../../store/useMerchantStore'
