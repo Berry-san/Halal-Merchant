@@ -106,6 +106,18 @@ const AddProduct = () => {
     }
   }, [categories])
 
+  const formatNumberWithCommas = (value: string) => {
+    const numericValue = value.replace(/\D/g, '') // Remove non-numeric characters
+    return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',') // Format with commas
+  }
+
+  // General change handler for formatted inputs
+  const handleFormattedChange =
+    (fieldName: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      const formattedValue = formatNumberWithCommas(e.target.value)
+      formik.setFieldValue(fieldName, formattedValue) // Update Formik with formatted value
+    }
+
   return (
     <div>
       <div className="flex space-x-4">
@@ -115,7 +127,7 @@ const AddProduct = () => {
       <h2 className="mt-4">Product Information</h2>
       <form onSubmit={formik.handleSubmit}>
         <div className="grid grid-cols-5 gap-5 mt-2">
-          <section className="col-span-5 lg:col-span-2 order-1 lg:order-2">
+          <section className="order-1 col-span-5 lg:col-span-2 lg:order-2">
             <div className="p-4 border rounded">
               <h3>Product Image</h3>
               <div className="flex items-center justify-center w-full">
@@ -146,7 +158,7 @@ const AddProduct = () => {
               </div>
             </div>
           </section>
-          <section className="col-span-5 p-4 border rounded lg:col-span-3 order-2 lg:order-1">
+          <section className="order-2 col-span-5 p-4 border rounded lg:col-span-3 lg:order-1">
             <h3>General Information</h3>
             <div className="mt-2">
               <div className="flex flex-col gap-5 space-y-5">
@@ -198,7 +210,7 @@ const AddProduct = () => {
                     </select>
                     {formik.touched.productCategory &&
                       formik.errors.productCategory && (
-                        <div className="text-red-600 text-xs">
+                        <div className="text-xs text-red-600">
                           {formik.errors.productCategory}
                         </div>
                       )}
@@ -230,7 +242,7 @@ const AddProduct = () => {
                     </select>
                     {formik.touched.productSubCategory &&
                       formik.errors.productSubCategory && (
-                        <div className="text-red-600 text-xs">
+                        <div className="text-xs text-red-600">
                           {formik.errors.productSubCategory}
                         </div>
                       )}
@@ -258,7 +270,7 @@ const AddProduct = () => {
                       name="productPrice"
                       placeholder="100,000"
                       value={formik.values.productPrice}
-                      onChange={formik.handleChange}
+                      onChange={handleFormattedChange('productPrice')}
                       onBlur={formik.handleBlur}
                       error={
                         formik.touched.productPrice &&
@@ -310,7 +322,7 @@ const AddProduct = () => {
                       label="Product Quantity"
                       name="productQuantity"
                       value={formik.values.productQuantity}
-                      onChange={formik.handleChange}
+                      onChange={handleFormattedChange('productQuantity')}
                       onBlur={formik.handleBlur}
                       error={
                         formik.touched.productQuantity &&

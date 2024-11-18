@@ -177,14 +177,14 @@ const Login: React.FC = () => {
                           {loginValue.errors.password}
                         </p>
                       ) : null}
-                      <div className="flex justify-end mt-1">
+                      {/* <div className="flex justify-end mt-1">
                         <Link
                           to="/resetPassword"
                           className="text-sm font-semibold underline"
                         >
                           Forgot Password?
                         </Link>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <div className="flex flex-col items-center justify-between w-full mt-5">

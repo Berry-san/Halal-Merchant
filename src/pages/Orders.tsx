@@ -69,11 +69,16 @@ const Order = () => {
     return matchesSearch && matchesStatus
   })
 
+  const clearFilters = () => {
+    setSearchTerm('')
+    setSelectedStatus('')
+  }
+
   return (
     <div className="">
       <h2>My Orders</h2>
 
-      <div className="mb-4 flex gap-4 items-end">
+      <div className="flex items-end gap-4 mb-4">
         <SearchBar
           placeholder="Search products..."
           value={searchTerm}
@@ -84,6 +89,12 @@ const Order = () => {
           value={selectedStatus}
           onChange={(e) => setSelectedStatus(e.target.value)}
         />
+        <button
+          onClick={clearFilters}
+          className="w-40 px-4 py-2 text-white rounded bg-secondary"
+        >
+          Clear Filters
+        </button>
       </div>
 
       <div className="relative">

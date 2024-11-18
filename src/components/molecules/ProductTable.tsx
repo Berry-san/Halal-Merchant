@@ -22,6 +22,8 @@ const ProductTable: React.FC<ProductTableProps> = ({
   handleEditProduct,
   handleDeleteProduct,
 }) => {
+  const reversedData = [...data].reverse()
+
   const [currentPage, setCurrentPage] = useState<number>(1)
   const usersPerPage: number = 10
 
@@ -31,7 +33,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
 
   const indexOfLastUser: number = currentPage * usersPerPage
   const indexOfFirstUser: number = indexOfLastUser - usersPerPage
-  const currentUsers = data.slice(indexOfFirstUser, indexOfLastUser)
+  const currentUsers = reversedData.slice(indexOfFirstUser, indexOfLastUser)
 
   return (
     <>
@@ -61,7 +63,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
                       <div className="text-sm font-semibold">
                         {product.product_name}
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-gray-500 capitalize">
                         {product.product_model} - {product.product_color}
                       </div>
                     </div>

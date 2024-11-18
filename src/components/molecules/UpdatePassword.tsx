@@ -20,12 +20,6 @@ const UpdatePassword = () => {
       pin: '',
       confirmPassword: '',
     },
-    validationSchema: Yup.object({
-      pin: Yup.string().required('Password is required'),
-      confirmPassword: Yup.string()
-        .oneOf([Yup.ref('pin')], 'Passwords must match')
-        .required('Please confirm your password'),
-    }),
     onSubmit: (values, { resetForm }) => {
       console.log(values)
 

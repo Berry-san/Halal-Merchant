@@ -17,7 +17,7 @@ const ProfileInfo = () => {
     initialValues: {
       email: merchant?.email || '',
       merchant_business_name: '',
-      phone_number: '',
+      phoneNumber: '',
     },
     onSubmit: (values) => {
       updateMerchantDetails(values)
@@ -48,12 +48,12 @@ const ProfileInfo = () => {
             <label className="block text-gray-600">Phone number:</label>
             <InputField
               type="text"
-              name="phone_number"
+              name="phoneNumber"
               placeholder="Current phone number"
-              value={formik.values.phone_number}
+              value={formik.values.phoneNumber}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.phone_number && formik.errors.phone_number}
+              error={formik.touched.phoneNumber && formik.errors.phoneNumber}
               className="w-full p-2 border rounded"
             />
           </div>
