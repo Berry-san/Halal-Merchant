@@ -3,7 +3,6 @@ import { MerchantSidebarLinks } from '../../constants/navigation'
 // import { UserSidebarLinks } from '../lib/constants/navigation'
 import { NavLink } from 'react-router-dom'
 import LogoutButton from '../atoms/LogoutButton'
-import halalLogo from '../../assets/images/halalLogo.png'
 interface SidebarProps {
   sidebarOpen: boolean
   setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>
