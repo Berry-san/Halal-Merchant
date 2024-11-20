@@ -42,6 +42,12 @@ const Header: React.FC<HeaderProps> = ({ sidebarOpen, setSidebarOpen }) => {
             </button>
           )}
         </div>
+        <div className="flex items-center justify-center mr-10 lg:hidden">
+          <img src={halalLogo} className="w-12 h-12" alt="" />
+        </div>
+        <div className="flex items-center justify-center lg:hidden">
+          {/* <img src={halalLogo} className="w-12 h-12" alt="" /> */}
+        </div>
         {merchant && (
           <div className="items-center justify-center hidden lg:flex">
             <span className="flex items-center justify-center w-12 h-12 mr-4 bg-gray-100 rounded-full">

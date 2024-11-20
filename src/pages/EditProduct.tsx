@@ -126,7 +126,7 @@ const EditProduct: React.FC = () => {
       ) : (
         <form onSubmit={formik.handleSubmit}>
           <div className="grid grid-cols-5 gap-5 mt-2">
-            <section className="order-1 ccol-span-5 lg:col-span-2 lg:order-2">
+            <section className="order-1 col-span-5 lg:col-span-2 lg:order-2">
               <div className="p-4 border rounded">
                 <h3>Product Image</h3>
                 <div className="flex items-center justify-center w-full">

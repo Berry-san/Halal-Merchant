@@ -3,11 +3,7 @@ import { MerchantSidebarLinks } from '../../constants/navigation'
 // import { UserSidebarLinks } from '../lib/constants/navigation'
 import { NavLink } from 'react-router-dom'
 import LogoutButton from '../atoms/LogoutButton'
-// import back from '../assets/back.svg'
-// import smartcareLogo from '../assets/smartcareLogo.svg'
-
-// import other imports as needed
-
+import halalLogo from '../../assets/images/halalLogo.png'
 interface SidebarProps {
   sidebarOpen: boolean
   setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -119,7 +115,20 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
             className="block lg:hidden"
           >
             {/* <img src={back} alt="" className="flex w-5 h-5" /> */}
-            close
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
           </button>
         </div>
         {/* SIDEBAR HEADER */}

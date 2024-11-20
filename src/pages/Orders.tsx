@@ -56,13 +56,14 @@ const Order = () => {
     { header: 'Date of order', key: 'orderDate' },
     { header: 'Quantity', key: 'quantity' },
     { header: 'Amount', key: 'amount' },
+    { header: 'Order status', key: 'status' },
   ]
 
   // Filter table data based on search term and status
   const filteredProducts = products.filter((product) => {
-    const matchesSearch = product.productName
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase())
+    const matchesSearch =
+      product.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.orderId.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = selectedStatus
       ? product.status === selectedStatus
       : true
@@ -75,26 +76,28 @@ const Order = () => {
   }
 
   return (
-    <div className="">
-      <h2>My Orders</h2>
+    <div className="space-y-4">
+      <h2 className="text-2xl font-bold">My Orders</h2>
 
-      <div className="flex items-end gap-4 mb-4">
+      <div className="flex flex-col items-end gap-4 mb-4 md:flex-row">
         <SearchBar
-          placeholder="Search products..."
+          placeholder="Search orders..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <SelectDropdown
-          options={statusOptions}
-          value={selectedStatus}
-          onChange={(e) => setSelectedStatus(e.target.value)}
-        />
-        <button
-          onClick={clearFilters}
-          className="w-40 px-4 py-2 text-white rounded bg-secondary"
-        >
-          Clear Filters
-        </button>
+        <div className="flex gap-4">
+          <SelectDropdown
+            options={statusOptions}
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value)}
+          />
+          <button
+            onClick={clearFilters}
+            className="w-40 px-4 py-2 text-white rounded bg-secondary"
+          >
+            Clear Filters
+          </button>
+        </div>
       </div>
 
       <div className="relative">

@@ -126,26 +126,21 @@ const Products: React.FC = () => {
     <div>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold">My Products</h2>
-        <div className="space-x-4">
-          <button
-            onClick={handleAddProduct}
-            className="px-4 py-2 text-white rounded bg-secondary"
-          >
-            Add Product
-          </button>
-        </div>
       </div>
-      <div className="flex items-end gap-4 mb-4">
+      <div className="flex items-end gap-4 mb-8">
         <SearchBar
           placeholder="Search products..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        {/* <SelectDropdown
-          options={statusOptions}
-          value={selectedStatus}
-          onChange={(e) => setSelectedStatus(e.target.value)}
-        /> */}
+        <div className="space-x-4">
+          <button
+            onClick={handleAddProduct}
+            className="w-40 px-4 py-2 text-white rounded bg-secondary"
+          >
+            Add Product
+          </button>
+        </div>
       </div>
       <div className="relative">
         <ProductTable

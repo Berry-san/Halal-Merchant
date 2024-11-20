@@ -57,7 +57,7 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                     {columns.map((column) => (
                       <td
                         key={column.key}
-                        className="px-6 py-4 text-sm text-gray-700 whitespace-nowrap"
+                        className="px-6 py-4 text-sm text-gray-700 capitalize whitespace-nowrap"
                       >
                         {row[column.key]}
                       </td>
