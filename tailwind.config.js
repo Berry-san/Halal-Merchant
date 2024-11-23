@@ -6,6 +6,9 @@ export default {
       colors: {
         secondary: '#101420',
       },
+      fontFamily: {
+        crimson: ['Crimson Pro', 'sans-serif'],
+      },
     },
   },
   plugins: [],

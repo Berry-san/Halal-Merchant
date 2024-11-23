@@ -179,7 +179,7 @@ const SidebarLinks: React.FC<SidebarLinksProps> = ({ link, onClick }) => {
           onClick={onClick}
           className={({ isActive }) =>
             isActive
-              ? 'group relative flex items-center gap-5 font-semibold rounded-sm py-2 px-4 bg-gray-400 duration-300 ease-in-out'
+              ? 'group relative flex items-center gap-5 font-semibold rounded-sm py-2 px-4 bg-gray-300 duration-300 ease-in-out'
               : 'group relative flex items-center gap-5 font-semibold px-4 py-2 text-black duration-300 ease-in-out'
           }
         >

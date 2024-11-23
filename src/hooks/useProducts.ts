@@ -10,7 +10,7 @@ export function useProductsList() {
 }
 
 export function useProductListByID(merchantId: number | string) {
-  return useQuery<Product[], Error>(['productsList', merchantId], () =>
+  return useQuery<Product[], Error>(['product', merchantId], () =>
     productService.fetchProductsByMerchantId(merchantId)
   )
 }

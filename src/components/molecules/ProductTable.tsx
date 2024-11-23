@@ -68,7 +68,9 @@ const ProductTable: React.FC<ProductTableProps> = ({
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-2">NGN {product.product_price}</td>
+                  <td className="px-4 py-2 tabular-nums">
+                    NGN {product.product_price}
+                  </td>
                   <td className="px-4 py-2">{product.product_quantity}</td>
                   <td className="px-4 py-2">
                     <div>

@@ -65,7 +65,7 @@ const AddProduct = () => {
       productDiscount: Yup.number().required('Discount is required').positive(),
       productModel: Yup.string().required('Model is required'),
       productColor: Yup.string().required('Color is required'),
-      productQuantity: Yup.number().required('Quantity is required').positive(),
+      productQuantity: Yup.string().required('Quantity is required'),
       expiryDate: Yup.date().required('Expiry Date is required').nullable(),
     }),
     onSubmit: (values) => {

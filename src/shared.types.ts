@@ -99,6 +99,22 @@ export interface MerchantLoginRequest {
   pin: string
 }
 
+export interface OrderProduct {
+  product_name: string
+  product_quantity: number
+  amount: number
+}
+
+export interface Order {
+  orderId: string
+  customerName: string
+  orderDate: string
+  amount: string
+  status: string
+  products: OrderProduct[]
+  subTotal: number
+}
+
 export interface OrderItem {
   order_item_id: number
   order_id: string

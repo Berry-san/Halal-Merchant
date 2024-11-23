@@ -2,6 +2,7 @@ import { useFormik } from 'formik'
 import { useUpdateMerchantDetails } from '../../hooks/useMerchant'
 import InputField from '../atoms/InputField'
 import { useMerchantStore } from '../../store/useMerchantStore'
+import { useEffect } from 'react'
 
 const ProfileInfo = () => {
   const { merchant } = useMerchantStore()
@@ -12,6 +13,12 @@ const ProfileInfo = () => {
     isSuccess,
     isError,
   } = useUpdateMerchantDetails()
+
+  useEffect(() => {
+    if (isSuccess) {
+      window.location.reload() // Reload the page
+    }
+  }, [isSuccess])
 
   const formik = useFormik({
     initialValues: {

@@ -14,58 +14,73 @@ const Order = () => {
   const [selectedStatus, setSelectedStatus] = useState('')
 
   // Sample table data
-  const products = [
+  const orders = [
     {
       orderId: '001',
-      productName: 'Product A',
+      customerName: 'Customer A',
       orderDate: '2023-10-29',
       quantity: 2,
       amount: '100',
       status: 'accepted',
+      products: [
+        { product_name: 'Product A', product_quantity: 1, amount: 50 },
+        { product_name: 'Product B', product_quantity: 1, amount: 50 },
+      ],
+      subTotal: 100, // Total amount for this order
     },
     {
       orderId: '002',
-      productName: 'Product B',
+      customerName: 'Customer B',
       orderDate: '2023-10-28',
       quantity: 1,
       amount: '150',
       status: 'shipped',
+      products: [
+        { product_name: 'Product C', product_quantity: 1, amount: 150 },
+      ],
+      subTotal: 150,
     },
     {
       orderId: '003',
-      productName: 'Product C',
+      customerName: 'Customer C',
       orderDate: '2023-10-27',
       quantity: 3,
       amount: '200',
       status: 'delivered',
+      products: [
+        { product_name: 'Product D', product_quantity: 2, amount: 100 },
+      ],
+      subTotal: 200,
     },
     {
       orderId: '004',
-      productName: 'Product D',
+      customerName: 'Customer D',
       orderDate: '2023-10-26',
       quantity: 4,
       amount: '250',
       status: 'received',
+      products: [
+        { product_name: 'Product E', product_quantity: 4, amount: 62.5 },
+      ],
+      subTotal: 250,
     },
-    // More sample data...
   ]
 
   const columns: Column[] = [
     { header: 'Order ID', key: 'orderId' },
-    { header: 'Product name', key: 'productName' },
     { header: 'Date of order', key: 'orderDate' },
-    { header: 'Quantity', key: 'quantity' },
+    { header: 'Customer name', key: 'customerName' },
     { header: 'Amount', key: 'amount' },
     { header: 'Order status', key: 'status' },
   ]
 
   // Filter table data based on search term and status
-  const filteredProducts = products.filter((product) => {
+  const filteredOrders = orders.filter((order) => {
     const matchesSearch =
-      product.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.orderId.toLowerCase().includes(searchTerm.toLowerCase())
+      order.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.orderId.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = selectedStatus
-      ? product.status === selectedStatus
+      ? order.status === selectedStatus
       : true
     return matchesSearch && matchesStatus
   })
@@ -101,7 +116,7 @@ const Order = () => {
       </div>
 
       <div className="relative">
-        <Table columns={columns} data={filteredProducts} />
+        <Table columns={columns} data={filteredOrders} />
       </div>
     </div>
   )
