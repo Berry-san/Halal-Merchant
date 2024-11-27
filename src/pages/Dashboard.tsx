@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Table, { Column } from '../components/molecules/Table'
-import DatePickerComponent from '../components/atoms/DatePickerComponent'
+// import DatePickerComponent from '../components/atoms/DatePickerComponent'
 import SummaryCard from '../components/molecules/SummaryCard'
 import useSummaryData from '../hooks/useSummaryData'
 import { useMerchantStore } from '../store/useMerchantStore'
@@ -10,24 +10,27 @@ const Dashboard = () => {
   const [startDate, setStartDate] = useState<Date | null>(null)
   const [endDate, setEndDate] = useState<Date | null>(null)
 
+  setStartDate(null)
+  setEndDate(null)
+
   // Fetch summary data using custom hook
   const summaryData = useSummaryData(startDate, endDate)
 
-  const handleStartDateChange = (date: Date | null) => {
-    if (endDate && date && date > endDate) {
-      alert('Start date cannot be later than end date.')
-      return
-    }
-    setStartDate(date)
-  }
+  // const handleStartDateChange = (date: Date | null) => {
+  //   if (endDate && date && date > endDate) {
+  //     alert('Start date cannot be later than end date.')
+  //     return
+  //   }
+  //   setStartDate(date)
+  // }
 
-  const handleEndDateChange = (date: Date | null) => {
-    if (startDate && date && date < startDate) {
-      alert('End date cannot be earlier than start date.')
-      return
-    }
-    setEndDate(date)
-  }
+  // const handleEndDateChange = (date: Date | null) => {
+  //   if (startDate && date && date < startDate) {
+  //     alert('End date cannot be earlier than start date.')
+  //     return
+  //   }
+  //   setEndDate(date)
+  // }
 
   const reverseStatusMapping: Record<number, string> = {
     3: 'Accepted',

@@ -6,7 +6,6 @@ import { Column } from '../components/molecules/Table'
 import {
   useDeleteProduct,
   useProductListByID,
-  useProductsList,
   useUpdateProduct,
 } from '../hooks/useProducts'
 import { Product } from '../shared.types'

@@ -1,7 +1,3 @@
-import React, { useState } from 'react'
-import Modal from './Modal'
-import { Order } from '../../shared.types'
-
 export interface Column {
   header: string
   key: string
@@ -14,26 +10,6 @@ interface TableProps {
 }
 
 const Table: React.FC<TableProps> = ({ columns, data }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  const [selectedRow, setSelectedRow] = useState<Order | null>(null)
-  const [status, setStatus] = useState('')
-
-  const handleRowClick = (row: any) => {
-    setSelectedRow(row)
-    setIsModalVisible(true)
-  }
-
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newStatus = event.target.value
-    setStatus(newStatus)
-    // updateStatus({ orderId, status: newStatus })
-  }
-
-  const handleClose = () => {
-    setIsModalVisible(false)
-    setSelectedRow(null) // Clear selected data when modal closes
-  }
-
   return (
     <>
       <div className="mt-4 overflow-x-auto border border-gray-200 rounded-lg">
@@ -55,7 +31,7 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
             {data.map((row, rowIndex) => (
               <tr
                 key={rowIndex}
-                onClick={() => handleRowClick(row)}
+                // onClick={() => handleRowClick(row)}
                 className="cursor-pointer"
               >
                 {columns.map((column) => (
