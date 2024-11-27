@@ -1,5 +1,5 @@
 // orderService.ts
-import axios from 'axios'
+import { apiBase } from './apiBase'
 import {
   OrderDetails,
   UpdateOrderStatusRequest,
@@ -8,12 +8,12 @@ import {
   DeliveryStatus,
 } from '../shared.types'
 
-const BASE_URL = 'http://194.163.149.51:3015/hialal/orders'
+const BASE_URL = ''
 
 export const orderService = {
   // Fetch order details by order ID
   async fetchOrderDetails(orderId: number): Promise<OrderDetails> {
-    const response = await axios.get(`${BASE_URL}/order_details/${orderId}`)
+    const response = await apiBase.get(`${BASE_URL}/order_details/${orderId}`)
     return response.data
   },
 
@@ -22,26 +22,30 @@ export const orderService = {
     orderId: number,
     status: UpdateOrderStatusRequest
   ): Promise<void> {
-    await axios.put(`${BASE_URL}/update_order_status/${orderId}`, status)
+    await apiBase.put(`${BASE_URL}/update_order_status/${orderId}`, status)
   },
 
   // Fetch orders for a specific merchant
-  async fetchMerchantOrders(merchantId: number): Promise<MerchantOrder[]> {
-    const response = await axios.get(
-      `${BASE_URL}/merchant_orders/${merchantId}`
+  async fetchMerchantOrders(
+    merchantId: number | string
+  ): Promise<MerchantOrder[]> {
+    const response = await apiBase.get(
+      // `${BASE_URL}/store_transaction/merchant_details/56`
+      `${BASE_URL}/store_transaction/merchant_details/${merchantId}`
     )
-    return response.data
+    console.log(response)
+    return response.data.merchant_data
   },
 
   // Fetch current order status
   async fetchOrderStatus(orderId: number): Promise<string> {
-    const response = await axios.get(`${BASE_URL}/order_status/${orderId}`)
+    const response = await apiBase.get(`${BASE_URL}/order_status/${orderId}`)
     return response.data
   },
 
   // Fetch order status history
   async fetchOrderStatusHistory(orderId: number): Promise<OrderHistoryItem[]> {
-    const response = await axios.get(
+    const response = await apiBase.get(
       `${BASE_URL}/order_status_history/${orderId}`
     )
     return response.data
@@ -49,7 +53,7 @@ export const orderService = {
 
   // Fetch delivery status
   async fetchDeliveryStatus(orderId: number): Promise<DeliveryStatus> {
-    const response = await axios.get(`${BASE_URL}/delivery_status/${orderId}`)
+    const response = await apiBase.get(`${BASE_URL}/delivery_status/${orderId}`)
     return response.data
   },
 }

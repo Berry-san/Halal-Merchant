@@ -2,6 +2,9 @@ import { useState } from 'react'
 import SelectDropdown from '../components/atoms/SelectDropdown'
 import SearchBar from '../components/molecules/SearchBar'
 import Table, { Column } from '../components/molecules/Table'
+import { useMerchantOrders } from '../hooks/useOrder'
+import { useMerchantStore } from '../store/useMerchantStore'
+import Pagination from '../components/atoms/Pagination/Pagination'
 
 const statusOptions = [
   { label: 'Accepted', value: 'accepted' },
@@ -9,78 +12,105 @@ const statusOptions = [
   { label: 'Delivered', value: 'delivered' },
   { label: 'Received', value: 'received' },
 ]
+
 const Order = () => {
+  const { merchant } = useMerchantStore() // Get merchant ID from the store
+  const merchantId = merchant?.merchant_id
+
+  if (!merchantId) {
+    return <div>Error loading merchant data...</div>
+  }
+
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('')
 
-  // Sample table data
-  const orders = [
-    {
-      orderId: '001',
-      customerName: 'Customer A',
-      orderDate: '2023-10-29',
-      quantity: 2,
-      amount: '100',
-      status: 'accepted',
-      products: [
-        { product_name: 'Product A', product_quantity: 1, amount: 50 },
-        { product_name: 'Product B', product_quantity: 1, amount: 50 },
-      ],
-      subTotal: 100, // Total amount for this order
-    },
-    {
-      orderId: '002',
-      customerName: 'Customer B',
-      orderDate: '2023-10-28',
-      quantity: 1,
-      amount: '150',
-      status: 'shipped',
-      products: [
-        { product_name: 'Product C', product_quantity: 1, amount: 150 },
-      ],
-      subTotal: 150,
-    },
-    {
-      orderId: '003',
-      customerName: 'Customer C',
-      orderDate: '2023-10-27',
-      quantity: 3,
-      amount: '200',
-      status: 'delivered',
-      products: [
-        { product_name: 'Product D', product_quantity: 2, amount: 100 },
-      ],
-      subTotal: 200,
-    },
-    {
-      orderId: '004',
-      customerName: 'Customer D',
-      orderDate: '2023-10-26',
-      quantity: 4,
-      amount: '250',
-      status: 'received',
-      products: [
-        { product_name: 'Product E', product_quantity: 4, amount: 62.5 },
-      ],
-      subTotal: 250,
-    },
-  ]
+  const {
+    data: orders = [],
+    isLoading,
+    isError,
+  } = useMerchantOrders(merchantId)
+
+  const reversedData = [...orders].reverse()
+
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const usersPerPage: number = 10
+
+  const paginate = (pageNumber: number): void => {
+    setCurrentPage(pageNumber)
+  }
+
+  const indexOfLastUser: number = currentPage * usersPerPage
+  const indexOfFirstUser: number = indexOfLastUser - usersPerPage
+  const currentUsers = reversedData.slice(indexOfFirstUser, indexOfLastUser)
+
+  const statusMapping: Record<string, number> = {
+    accepted: 3,
+    processing: 1,
+    shipped: 2,
+    delivered: 4,
+  }
+
+  const reverseStatusMapping: Record<number, string> = {
+    3: 'Accepted',
+    1: 'Processing',
+    2: 'Shipped',
+    4: 'Delivered',
+  }
 
   const columns: Column[] = [
-    { header: 'Order ID', key: 'orderId' },
-    { header: 'Date of order', key: 'orderDate' },
-    { header: 'Customer name', key: 'customerName' },
-    { header: 'Amount', key: 'amount' },
-    { header: 'Order status', key: 'status' },
+    { header: 'Order ID', key: 'order_reference' },
+    {
+      header: 'Date of order',
+      key: 'insert_date',
+      format: (value) => {
+        const date = new Date(value)
+        return new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(
+          date
+        )
+      },
+    },
+    {
+      header: 'Amount',
+      key: 'price',
+      format: (value) =>
+        new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'NGN',
+        }).format(value),
+    },
+    {
+      header: 'Order status',
+      key: 'merchant_status',
+      format: (value) => {
+        const status = reverseStatusMapping[value] || `Unknown (${value})`
+        return (
+          <span
+            className={`px-2 py-1 rounded ${
+              status === 'Accepted'
+                ? 'bg-green-100 text-green-600'
+                : status === 'Processing'
+                ? 'bg-yellow-100 text-yellow-600'
+                : status === 'Shipped'
+                ? 'bg-blue-100 text-blue-600'
+                : status === 'Delivered'
+                ? 'bg-purple-100 text-purple-600'
+                : 'bg-gray-100 text-gray-600'
+            }`}
+          >
+            {status}
+          </span>
+        )
+      },
+    },
   ]
 
-  // Filter table data based on search term and status
+  // Filter orders based on search term and selected status
   const filteredOrders = orders.filter((order) => {
-    const matchesSearch =
-      order.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.orderId.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesSearch = order.product_name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
     const matchesStatus = selectedStatus
-      ? order.status === selectedStatus
+      ? String(order.merchant_status) === String(statusMapping[selectedStatus])
       : true
     return matchesSearch && matchesStatus
   })
@@ -88,6 +118,14 @@ const Order = () => {
   const clearFilters = () => {
     setSearchTerm('')
     setSelectedStatus('')
+  }
+
+  if (isLoading) {
+    return <div>Loading orders...</div>
+  }
+
+  if (isError) {
+    return <div>Failed to load orders. Please try again later.</div>
   }
 
   return (
@@ -98,7 +136,7 @@ const Order = () => {
         <SearchBar
           placeholder="Search orders..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
         />
         <div className="flex gap-4">
           <SelectDropdown
@@ -116,7 +154,22 @@ const Order = () => {
       </div>
 
       <div className="relative">
-        <Table columns={columns} data={filteredOrders} />
+        {currentUsers.length > 0 ? (
+          <>
+            <Table columns={columns} data={filteredOrders} />
+            <div className="flex justify-center mt-2">
+              <Pagination
+                currentPage={currentPage}
+                onPageChange={paginate}
+                totalCount={filteredOrders.length}
+                pageSize={usersPerPage}
+                siblingCount={1}
+              />
+            </div>
+          </>
+        ) : (
+          <div className="text-center">No orders found.</div>
+        )}
       </div>
     </div>
   )

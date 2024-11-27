@@ -37,21 +37,21 @@ const ProductTable: React.FC<ProductTableProps> = ({
 
   return (
     <>
-      <div className="max-w-full overflow-x-auto border border-gray-200 rounded-lg">
-        <table className="w-full table-auto">
-          <thead>
-            <tr className="border-b">
-              {columns.map((column) => (
-                <th key={column.key} className="px-4 py-2 text-left">
-                  {column.header}
-                </th>
-              ))}
-              <th className="px-6 py-3"> </th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentUsers.length > 0 ? (
-              currentUsers.map((product) => (
+      {currentUsers.length > 0 ? (
+        <div className="max-w-full overflow-x-auto border border-gray-200 rounded-lg">
+          <table className="w-full table-auto">
+            <thead>
+              <tr className="border-b">
+                {columns.map((column) => (
+                  <th key={column.key} className="px-4 py-2 text-left">
+                    {column.header}
+                  </th>
+                ))}
+                <th className="px-6 py-3"> </th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentUsers.map((product) => (
                 <tr key={product.product_id} className="text-left border-b">
                   <td className="flex items-center px-6 py-4">
                     <img
@@ -101,17 +101,13 @@ const ProductTable: React.FC<ProductTableProps> = ({
                     />
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td className="px-4 font-bold" colSpan={columns.length}>
-                  No data available
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div className="text-center">No products found.</div>
+      )}
       {currentUsers ? (
         <>
           <div className="flex justify-center">

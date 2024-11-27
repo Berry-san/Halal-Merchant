@@ -5,12 +5,14 @@ import ProductTable from '../components/molecules/ProductTable'
 import { Column } from '../components/molecules/Table'
 import {
   useDeleteProduct,
+  useProductListByID,
   useProductsList,
   useUpdateProduct,
 } from '../hooks/useProducts'
 import { Product } from '../shared.types'
 import { useNavigate } from 'react-router-dom'
 import { getProductImageURL } from '../utils/getProductImageURL'
+import { useMerchantStore } from '../store/useMerchantStore'
 
 // import paths from '../routes/paths'
 
@@ -24,10 +26,24 @@ import { getProductImageURL } from '../utils/getProductImageURL'
 const Products: React.FC = () => {
   const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
-  // const [selectedStatus, setSelectedStatus] = useState('')
+  const { merchant } = useMerchantStore()
+  const merchantId = merchant?.merchant_id
+
+  if (!merchantId) {
+    return <div>Error loading merchant data...</div>
+  }
 
   // Fetch products from the API using the hook
-  const { data: products = [], isLoading, error } = useProductsList()
+  const {
+    data: products = [],
+    isLoading,
+    error,
+  } = useProductListByID(merchantId)
+  console.log(products)
+
+  if (!products) {
+    return <div>Loading product data...</div>
+  }
 
   const columns: Column[] = [
     { header: 'Product Info', key: 'productInfo' },

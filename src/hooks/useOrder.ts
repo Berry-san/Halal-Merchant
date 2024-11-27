@@ -30,7 +30,7 @@ export function useUpdateOrderStatus(orderId: number) {
   )
 }
 
-export function useMerchantOrders(merchantId: number) {
+export function useMerchantOrders(merchantId: number | string) {
   return useQuery<MerchantOrder[], Error>(['merchantOrders', merchantId], () =>
     orderService.fetchMerchantOrders(merchantId)
   )

@@ -1,5 +1,6 @@
 import { Product, ProductDetails, UpdateProductRequest } from '../shared.types'
 import { apiBase } from './apiBase'
+import { toast } from 'react-toastify'
 
 const BASE_URL = '/products'
 
@@ -21,9 +22,11 @@ export const productService = {
   ): Promise<Product[]> {
     try {
       const response = await apiBase.get(
-        `${BASE_URL}/products_list/${merchantId}`
+        `${BASE_URL}/merchant_details/${merchantId}`
+        // `${BASE_URL}/merchant_details/66`
       )
-      return response.data.products
+      console.log(response)
+      return response.data.productDetails
     } catch (error) {
       console.error('Error fetching products by merchantId:', error)
       throw new Error('Could not fetch products by merchantId')
@@ -57,6 +60,7 @@ export const productService = {
       console.log(response.data)
       return response.data
     } catch (error) {
+      toast.error('Could not add new product')
       console.error('Error adding new product:', error)
       throw new Error('Could not add new product')
     }

@@ -143,14 +143,19 @@ export interface UpdateOrderStatusRequest {
 }
 
 export interface MerchantOrder {
-  order_item_id: number
-  order_id: string
+  // order_item_id: number
+  // order_id: string
+  order_reference: string
   product_id: string
   customer_id: string
   merchant_id: string
   price: string
   quantity: string | null
-  ordered_at: string | null
+  product_name: string
+  product_image: string
+  payment_status: string
+  insert_date: string
+  merchant_status: string
 }
 
 export interface OrderHistoryItem {
