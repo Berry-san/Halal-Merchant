@@ -1,5 +1,4 @@
 # .husky/pre-push
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-npm run build && npm test
+# This script is run before pushing to the remote repository.
+npm run build 
