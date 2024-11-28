@@ -1,5 +1,6 @@
 // orderService.ts
 import { apiBase } from './apiBase'
+import { useState } from 'react'
 import {
   OrderDetails,
   UpdateOrderStatusRequest,
@@ -35,6 +36,7 @@ export const orderService = {
     )
     return response.data.merchant_data
   },
+  // Fetch current order status
 
   // Fetch current order status
   async fetchOrderStatus(orderId: number): Promise<string> {
