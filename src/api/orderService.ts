@@ -1,7 +1,5 @@
 // orderService.ts
 import { apiBase } from './apiBase'
-import { useState, useEffect } from 'react'
-import { useReducer, useCallback } from 'react'
 import {
   OrderDetails,
   UpdateOrderStatusRequest,
