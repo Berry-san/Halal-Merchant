@@ -1,0 +1,4 @@
+# .husky/pre-push
+#!/bin/sh
+# This script is run before pushing to the remote repository.
+npm run build 
