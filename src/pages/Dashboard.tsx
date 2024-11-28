@@ -7,11 +7,11 @@ import { useMerchantStore } from '../store/useMerchantStore'
 import { useMerchantOrders } from '../hooks/useOrder'
 
 const Dashboard = () => {
-  const [startDate, setStartDate] = useState<Date | null>(null)
-  const [endDate, setEndDate] = useState<Date | null>(null)
+  // const [startDate, setStartDate] = useState<Date | null>(null)
+  // const [endDate, setEndDate] = useState<Date | null>(null)
 
-  setStartDate(null)
-  setEndDate(null)
+  const startDate = null
+  const endDate = null
 
   // Fetch summary data using custom hook
   const summaryData = useSummaryData(startDate, endDate)
@@ -88,7 +88,6 @@ const Dashboard = () => {
 
   const { merchant } = useMerchantStore() // Get merchant ID from the store
   const merchantId = merchant?.merchant_id
-  console.log(merchantId)
 
   if (!merchantId) {
     return <div>Loading merchant data...</div>

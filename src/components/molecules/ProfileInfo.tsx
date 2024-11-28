@@ -74,7 +74,12 @@ const ProfileInfo = () => {
             {isLoading ? 'Updating...' : 'Update personal info'}
           </button>
           {isSuccess && (
-            <p className="mt-2 text-green-600">Info updated successfully!</p>
+            <>
+              <p className="mt-2 text-green-600">Info updated successfully!</p>
+              <p className="mt-2 text-gray-500">
+                Details would be updated in your profile on your next login.
+              </p>
+            </>
           )}
           {isError && (
             <p className="mt-2 text-red-600">Failed to update info.</p>

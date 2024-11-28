@@ -10,7 +10,7 @@ export function useProductsList() {
 }
 
 export function useProductListByID(merchantId: number | string) {
-  return useQuery<Product[], Error>(['product', merchantId], () =>
+  return useQuery<Product[], Error>(['productListByID', merchantId], () =>
     productService.fetchProductsByMerchantId(merchantId)
   )
 }
@@ -43,7 +43,7 @@ export function useUpdateProduct() {
     }) => productService.updateProduct(updateData), // Pass the data directly
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('productsList') // Refresh product list
+        queryClient.invalidateQueries('productListByID') // Refresh product list
       },
     }
   )
@@ -115,7 +115,7 @@ export function useDeleteProduct() {
     (productId: number | string) => productService.deleteProduct(productId),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('productsList') // Refresh product list
+        queryClient.invalidateQueries('productListByID') // Refresh product list
       },
     }
   )

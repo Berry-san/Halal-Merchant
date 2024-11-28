@@ -38,7 +38,6 @@ const Products: React.FC = () => {
     isLoading,
     error,
   } = useProductListByID(merchantId)
-  console.log(products)
 
   if (!products) {
     return <div>Loading product data...</div>

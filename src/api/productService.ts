@@ -25,7 +25,6 @@ export const productService = {
         `${BASE_URL}/merchant_details/${merchantId}`
         // `${BASE_URL}/merchant_details/66`
       )
-      console.log(response)
       return response.data.productDetails
     } catch (error) {
       console.error('Error fetching products by merchantId:', error)
