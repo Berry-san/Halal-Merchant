@@ -33,7 +33,6 @@ export const orderService = {
       // `${BASE_URL}/store_transaction/merchant_details/56`
       `${BASE_URL}/store_transaction/merchant_details/${merchantId}`
     )
-    console.log(response)
     return response.data.merchant_data
   },
 
