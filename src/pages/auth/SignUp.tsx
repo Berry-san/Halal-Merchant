@@ -71,7 +71,7 @@ const Signup: React.FC = () => {
                 email_address: data.email,
                 names: data.names,
                 merchant_business_name: data.merchant_business_name,
-                merchant_id: data.merchant_id,
+                merchantId: data.merchantId,
                 gender: data.gender,
                 email: data.email,
                 address: data.address,
@@ -82,6 +82,7 @@ const Signup: React.FC = () => {
                 isAuthenticated: true,
                 active_status: data.active_status,
               }
+
               setMerchant(merchantData)
               toast.success('Signup successful!')
               navigate('/')
@@ -98,16 +99,6 @@ const Signup: React.FC = () => {
         }
       )
     },
-  })
-
-  console.log({
-    names: signupValues.values.names,
-    gender: signupValues.values.gender,
-    email: signupValues.values.emailAddress,
-    address: signupValues.values.address,
-    phonenumber: signupValues.values.phonenumber,
-    password: signupValues.values.password,
-    merchant_business_name: signupValues.values.merchant_business_name,
   })
 
   return (

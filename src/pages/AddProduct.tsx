@@ -71,7 +71,7 @@ const AddProduct = () => {
     onSubmit: (values) => {
       const formData = new FormData()
       formData.append('productName', values.productName)
-      formData.append('merchantId', String(merchant?.merchant_id))
+      formData.append('merchantId', String(merchant?.merchantId))
       formData.append('shortProductName', values.shortProductName)
       formData.append('productPrice', values.productPrice)
       formData.append('productDescription', values.productDescription)

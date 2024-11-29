@@ -59,7 +59,9 @@ export const productService = {
       console.log(response.data)
       return response.data
     } catch (error) {
-      toast.error('Could not add new product')
+      toast.error(
+        'Could not add new product. Ensure all fields are filled out.'
+      )
       console.error('Error adding new product:', error)
       throw new Error('Could not add new product')
     }

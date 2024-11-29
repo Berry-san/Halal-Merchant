@@ -222,7 +222,7 @@ export interface LoginBody {
 // Response structure from login
 export interface Merchant {
   merchant_id: number
-  // merchantId?: string | number
+  merchantId?: string | number
   names: string
   merchant_business_name: string
   gender: string
@@ -238,17 +238,19 @@ export interface Merchant {
 }
 
 // Merchant registration type
-export interface MerchantRegistration {
+export interface MerchantResponse {
   names: string
   gender: string
   email: string
   address: string
-  password: string
   phonenumber: string
   merchant_business_name: string
   providus_account_no?: string
   merchantId?: string | number
   status?: number
+}
+export interface MerchantRegistration extends MerchantResponse {
+  password: string
 }
 
 export interface MerchantComplaintRequest {

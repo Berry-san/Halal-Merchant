@@ -30,8 +30,8 @@ export const orderService = {
     merchantId: number | string
   ): Promise<MerchantOrder[]> {
     const response = await apiBase.get(
-      // `${BASE_URL}/store_transaction/merchant_details/56`
-      `${BASE_URL}/store_transaction/merchant_details/${merchantId}`
+      `${BASE_URL}/store_transaction/merchant_details/56`
+      // `${BASE_URL}/store_transaction/merchant_details/${merchantId}`
     )
     return response.data.merchant_data
   },

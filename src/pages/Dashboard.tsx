@@ -86,17 +86,29 @@ const Dashboard = () => {
   ]
 
   const { merchant } = useMerchantStore() // Get merchant ID from the store
-  const merchantId = merchant?.merchant_id
+  const merchantId = merchant?.merchantId
+  console.log(merchant)
 
   if (!merchantId) {
     return <div>Loading merchant data...</div>
   }
 
+  // const {
+  //   data: orders = [],
+  //   isLoading,
+  //   isError,
+  // } = useMerchantOrders(merchantId)
   const {
-    data: orders = [],
+    data: rawOrders = [],
     isLoading,
     isError,
   } = useMerchantOrders(merchantId)
+
+  // Add order_reference to each order
+  const orders = rawOrders.map((order) => ({
+    ...order,
+    order_reference: `ORD#${Math.random().toString().slice(2, 8)}`, // Generate unique reference
+  }))
 
   const mostRecent = orders.reverse().slice(0, 5)
 

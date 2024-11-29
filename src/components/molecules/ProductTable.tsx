@@ -35,6 +35,8 @@ const ProductTable: React.FC<ProductTableProps> = ({
   const indexOfFirstUser: number = indexOfLastUser - usersPerPage
   const currentUsers = reversedData.slice(indexOfFirstUser, indexOfLastUser)
 
+  console.log(currentUsers)
+
   return (
     <>
       {currentUsers.length > 0 ? (
@@ -56,6 +58,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
                   <td className="flex items-center px-6 py-4">
                     <img
                       src={getProductImageURL(product.product_picture)}
+                      // src="https://drive.google.com/thumbnail?id=17D-uKAOgsni3PgWd40Qo9MYkjFuXrYAD&sz=w1000"
                       alt={product.product_name}
                       className="w-12 h-12 mr-4 rounded"
                     />

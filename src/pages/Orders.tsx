@@ -15,7 +15,7 @@ const statusOptions = [
 
 const Order = () => {
   const { merchant } = useMerchantStore() // Get merchant ID from the store
-  const merchantId = merchant?.merchant_id
+  const merchantId = merchant?.merchantId
 
   if (!merchantId) {
     return <div>Error loading merchant data...</div>
@@ -24,11 +24,25 @@ const Order = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('')
 
+  // const {
+  //   data: orders = [],
+  //   isLoading,
+  //   isError,
+  // } = useMerchantOrders(merchantId)
+
+  // const reversedData = [...orders].reverse()
+
   const {
-    data: orders = [],
+    data: rawOrders = [],
     isLoading,
     isError,
   } = useMerchantOrders(merchantId)
+
+  // Add order_reference to each order
+  const orders = rawOrders.map((order) => ({
+    ...order,
+    order_reference: `ORD#${Math.random().toString().slice(2, 8)}`, // Generate unique reference
+  }))
 
   const reversedData = [...orders].reverse()
 
@@ -106,9 +120,9 @@ const Order = () => {
 
   // Filter orders based on search term and selected status
   const filteredOrders = orders.filter((order) => {
-    const matchesSearch = order.product_name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase())
+    const matchesSearch =
+      order.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.order_reference.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = selectedStatus
       ? String(order.merchant_status) === String(statusMapping[selectedStatus])
       : true

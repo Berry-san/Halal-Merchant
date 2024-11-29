@@ -1,11 +1,11 @@
 // store/useMerchantStore.ts
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { Merchant } from '../shared.types'
+import { MerchantResponse } from '../shared.types'
 
 interface MerchantStore {
-  merchant: Merchant | null
-  setMerchant: (merchant: Merchant) => void
+  merchant: MerchantResponse | null
+  setMerchant: (merchant: any) => void
   clearMerchant: () => void
   logout: () => void // Adding the logout function here
 }

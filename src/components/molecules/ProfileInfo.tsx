@@ -2,7 +2,7 @@ import { useFormik } from 'formik'
 import { useUpdateMerchantDetails } from '../../hooks/useMerchant'
 import InputField from '../atoms/InputField'
 import { useMerchantStore } from '../../store/useMerchantStore'
-import { useEffect } from 'react'
+// import { useEffect } from 'react'
 
 const ProfileInfo = () => {
   const { merchant } = useMerchantStore()
@@ -14,11 +14,11 @@ const ProfileInfo = () => {
     isError,
   } = useUpdateMerchantDetails()
 
-  useEffect(() => {
-    if (isSuccess) {
-      window.location.reload() // Reload the page
-    }
-  }, [isSuccess])
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     window.location.reload() // Reload the page
+  //   }
+  // }, [isSuccess])
 
   const formik = useFormik({
     initialValues: {
@@ -76,7 +76,7 @@ const ProfileInfo = () => {
           {isSuccess && (
             <>
               <p className="mt-2 text-green-600">Info updated successfully!</p>
-              <p className="mt-2 text-gray-500">
+              <p className="mt-2 text-green-600">
                 Details would be updated in your profile on your next login.
               </p>
             </>

@@ -43,7 +43,7 @@ const Login: React.FC = () => {
                 email_address: data.email,
                 names: data.names,
                 merchant_business_name: data.merchant_business_name,
-                merchant_id: data.merchant_id,
+                merchantId: data.merchant_id,
                 gender: data.gender,
                 email: data.email,
                 address: data.address,

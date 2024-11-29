@@ -18,7 +18,7 @@ const ReportProblem = () => {
     initialValues: {
       email: merchant?.email || '',
       merchant_name: merchant?.names || '',
-      merchantId: merchant?.merchant_id || '',
+      merchantId: merchant?.merchantId || '',
       subject: '',
       message: '',
     },

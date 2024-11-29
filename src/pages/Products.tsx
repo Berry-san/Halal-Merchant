@@ -26,7 +26,7 @@ const Products: React.FC = () => {
   const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
   const { merchant } = useMerchantStore()
-  const merchantId = merchant?.merchant_id
+  const merchantId = merchant?.merchantId
 
   if (!merchantId) {
     return <div>Error loading merchant data...</div>
