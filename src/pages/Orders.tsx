@@ -33,16 +33,16 @@ const Order = () => {
   // const reversedData = [...orders].reverse()
 
   const {
-    data: rawOrders = [],
+    data: orders = [],
     isLoading,
     isError,
   } = useMerchantOrders(merchantId)
 
   // Add order_reference to each order
-  const orders = rawOrders.map((order) => ({
-    ...order,
-    order_reference: `ORD#${Math.random().toString().slice(2, 8)}`, // Generate unique reference
-  }))
+  // const orders = rawOrders.map((order) => ({
+  //   ...order,
+  //   order_reference: `ORD#${Math.random().toString().slice(2, 8)}`, // Generate unique reference
+  // }))
 
   const reversedData = [...orders].reverse()
 
@@ -83,6 +83,7 @@ const Order = () => {
         )
       },
     },
+    { header: 'Product', key: 'product_name' },
     {
       header: 'Amount',
       key: 'price',
@@ -119,7 +120,7 @@ const Order = () => {
   ]
 
   // Filter orders based on search term and selected status
-  const filteredOrders = orders.filter((order) => {
+  const filteredOrders = reversedData.filter((order) => {
     const matchesSearch =
       order.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.order_reference.toLowerCase().includes(searchTerm.toLowerCase())

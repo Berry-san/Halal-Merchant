@@ -35,8 +35,6 @@ const ProductTable: React.FC<ProductTableProps> = ({
   const indexOfFirstUser: number = indexOfLastUser - usersPerPage
   const currentUsers = reversedData.slice(indexOfFirstUser, indexOfLastUser)
 
-  console.log(currentUsers)
-
   return (
     <>
       {currentUsers.length > 0 ? (
@@ -81,7 +79,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
                         {product.category_name}
                       </div>
                       <div className="text-xs text-gray-500">
-                        {product.subcategory_name}
+                        {product.subcategory_name}SET
                       </div>
                     </div>
                   </td>
@@ -111,7 +109,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
       ) : (
         <div className="text-center">No products found.</div>
       )}
-      {currentUsers ? (
+      {currentUsers.length > 0 ? (
         <>
           <div className="flex justify-center">
             <Pagination

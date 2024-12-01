@@ -50,6 +50,7 @@ const Dashboard = () => {
         )
       },
     },
+    { header: 'Product', key: 'product_name' },
     {
       header: 'Amount',
       key: 'price',
@@ -87,7 +88,6 @@ const Dashboard = () => {
 
   const { merchant } = useMerchantStore() // Get merchant ID from the store
   const merchantId = merchant?.merchantId
-  console.log(merchant)
 
   if (!merchantId) {
     return <div>Loading merchant data...</div>
@@ -99,18 +99,18 @@ const Dashboard = () => {
   //   isError,
   // } = useMerchantOrders(merchantId)
   const {
-    data: rawOrders = [],
+    data: orders = [],
     isLoading,
     isError,
   } = useMerchantOrders(merchantId)
 
   // Add order_reference to each order
-  const orders = rawOrders.map((order) => ({
-    ...order,
-    order_reference: `ORD#${Math.random().toString().slice(2, 8)}`, // Generate unique reference
-  }))
+  // const orders = rawOrders.map((order) => ({
+  //   ...order,
+  //   order_reference: `ORD#${Math.random().toString().slice(2, 8)}`, // Generate unique reference
+  // }))
 
-  const mostRecent = orders.reverse().slice(0, 5)
+  const mostRecent = [...orders].reverse().slice(0, 5)
 
   if (isLoading) {
     return <div>Loading orders...</div>

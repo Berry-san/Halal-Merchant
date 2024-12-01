@@ -1,7 +1,7 @@
 export interface Column {
   header: string
   key: string
-  format?: (value: any) => React.ReactNode // Accept JSX or string
+  format?: (value: any) => React.ReactNode
 }
 
 interface TableProps {
@@ -40,7 +40,7 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                     className="px-6 py-4 text-sm text-gray-700 capitalize whitespace-nowrap"
                   >
                     {column.format
-                      ? column.format(row[column.key]) // Use formatter if available
+                      ? column.format(row[column.key])
                       : row[column.key]}
                   </td>
                 ))}

@@ -26,8 +26,12 @@ const ProfileInfo = () => {
       merchant_business_name: '',
       phoneNumber: '',
     },
-    onSubmit: (values) => {
-      updateMerchantDetails(values)
+    onSubmit: (values, { resetForm }) => {
+      updateMerchantDetails(values, {
+        onSuccess: () => {
+          resetForm() // Clear the form after successful submission
+        },
+      })
     },
   })
 

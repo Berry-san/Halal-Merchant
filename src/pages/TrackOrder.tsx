@@ -74,7 +74,7 @@ const TrackOrder = () => {
                 <div className="flex flex-col">
                   <p className="text-gray-500">Order Summary</p>
                   <p className="text-sm font-medium">
-                    Customer Name: {orderDetails?.register_name}
+                    Customer Name : {orderDetails?.register_name}
                   </p>
                 </div>
                 <div className="grid grid-cols-2">
@@ -87,7 +87,9 @@ const TrackOrder = () => {
                     </div>
                     <div className="flex flex-col">
                       <p className="text-gray-500">Order Date</p>
-                      <p className="text-sm font-medium">Lord X</p>
+                      <p className="text-sm font-medium">
+                        {orderDetails.transaction_dt || 'No date'}
+                      </p>
                     </div>
                   </div>
                   <div className="flex flex-col justify-between col-span-2 space-y-4 md:col-span-1">
@@ -99,7 +101,10 @@ const TrackOrder = () => {
                     </div>
                     <div className="flex flex-col">
                       <p className="text-gray-500">Estimated Delivery Date</p>
-                      <p className="text-sm font-medium">Lord X</p>
+                      <p className="text-sm font-medium">
+                        {' '}
+                        {orderDetails.transaction_dt || 'No date'}
+                      </p>
                     </div>
                   </div>
                 </div>
