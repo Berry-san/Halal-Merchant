@@ -89,7 +89,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
                       onToggle={() =>
                         handleToggleStatus(
                           product.product_id,
-                          product.status === '1' ? '0' : '1' // Toggle between '1' (active) and '0' (inactive)
+                          product.status === '0' ? '1' : '0' // Toggle between '1' (active) and '0' (inactive)
                         )
                       }
                     />

@@ -27,6 +27,7 @@ const AddProduct = () => {
   const { data: subcategories } = useSubcategoriesByCategoryId(
     selectedCategoryId as number
   )
+  console.log(subcategories)
 
   // State for storing the uploaded file
   const [uploadedImage, setUploadedImage] = useState<File | null>(null)
@@ -124,12 +125,15 @@ const AddProduct = () => {
         <BackButton />
         <h2 className="text-xl font-bold">Add Product</h2>
       </div>
-      <h2 className="mt-4">Product Information</h2>
+      <h2 className="mt-4 text-2xl font-bold">Product Information</h2>
       <form onSubmit={formik.handleSubmit}>
         <div className="grid grid-cols-5 gap-5 mt-2">
-          <section className="order-1 col-span-5 lg:col-span-2 lg:order-2">
-            <div className="p-4 border rounded">
-              <h3>Product Image</h3>
+          {/* Image container */}
+          <section className="relative order-1 col-span-5 lg:col-span-2 lg:order-2">
+            <div className="p-4 border rounded md:sticky top-10">
+              <h3>
+                Product Image <span className="text-red-600">*</span>
+              </h3>
               <div className="flex items-center justify-center w-full">
                 <label
                   htmlFor="dropzone-file"
@@ -142,10 +146,10 @@ const AddProduct = () => {
                       className="object-fill w-full h-64 rounded-lg"
                     />
                   ) : null}
-                  <p className="w-full py-4 mt-2 text-center text-gray-500 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                  <p className="w-full px-6 py-4 mt-2 text-center text-gray-500 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
                     {uploadedImage
-                      ? 'Change Product Image'
-                      : 'Upload Product Image'}
+                      ? 'Change Product Image. Supported formats: JPG, PNG (Max: 2MB)'
+                      : 'Upload Product Image. Supported formats: JPG, PNG  (Max: 2MB)'}
                   </p>
                   <input
                     id="dropzone-file"
@@ -159,7 +163,7 @@ const AddProduct = () => {
             </div>
           </section>
           <section className="order-2 col-span-5 p-4 border rounded lg:col-span-3 lg:order-1">
-            <h3>General Information</h3>
+            <h3 className="text-lg font-bold">General Information</h3>
             <div className="mt-2">
               <div className="flex flex-col gap-5 space-y-5">
                 <section>
@@ -172,6 +176,7 @@ const AddProduct = () => {
                     error={
                       formik.touched.productName && formik.errors.productName
                     }
+                    compulsory={true}
                   />
                   <InputField
                     label="Product Short Name"
@@ -183,10 +188,11 @@ const AddProduct = () => {
                       formik.touched.shortProductName &&
                       formik.errors.shortProductName
                     }
+                    compulsory={true}
                   />
                   <div className="flex flex-col space-y-2">
                     <label htmlFor="productCategory" className="text-gray-500">
-                      Product Category:
+                      Product Category <span className="text-red-600">*</span>
                     </label>
                     <select
                       name="productCategory"
@@ -221,7 +227,8 @@ const AddProduct = () => {
                       htmlFor="productSubCategory"
                       className="text-gray-500"
                     >
-                      Product Sub-Category:
+                      Product Sub-Category{' '}
+                      <span className="text-red-600">*</span>
                     </label>
                     <select
                       name="productSubCategory"
@@ -249,7 +256,7 @@ const AddProduct = () => {
                   </div>
 
                   <TextAreaField
-                    label="Product Description"
+                    label="Product Description (Max: 1250 characters)"
                     name="productDescription"
                     value={formik.values.productDescription}
                     onChange={formik.handleChange}
@@ -259,11 +266,12 @@ const AddProduct = () => {
                       formik.errors.productDescription
                     }
                     rows={5}
+                    compulsory={true}
                   />
                 </section>
 
                 <section>
-                  <h3>Price Information</h3>
+                  <h3 className="text-lg font-bold">Price Information</h3>
                   <div className="grid grid-cols-2 gap-5 mt-2">
                     <InputField
                       label="Product Price"
@@ -276,6 +284,31 @@ const AddProduct = () => {
                         formik.touched.productPrice &&
                         formik.errors.productPrice
                       }
+                      compulsory={true}
+                    />
+                    <InputField
+                      label="Product Quantity"
+                      name="productQuantity"
+                      value={formik.values.productQuantity}
+                      onChange={handleFormattedChange('productQuantity')}
+                      onBlur={formik.handleBlur}
+                      error={
+                        formik.touched.productQuantity &&
+                        formik.errors.productQuantity
+                      }
+                      compulsory={true}
+                    />
+                    <InputField
+                      label="Product Color"
+                      name="productColor"
+                      value={formik.values.productColor}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={
+                        formik.touched.productColor &&
+                        formik.errors.productColor
+                      }
+                      compulsory={true}
                     />
                     <InputField
                       label="VAT"
@@ -307,28 +340,7 @@ const AddProduct = () => {
                         formik.errors.productModel
                       }
                     />
-                    <InputField
-                      label="Product Color"
-                      name="productColor"
-                      value={formik.values.productColor}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      error={
-                        formik.touched.productColor &&
-                        formik.errors.productColor
-                      }
-                    />
-                    <InputField
-                      label="Product Quantity"
-                      name="productQuantity"
-                      value={formik.values.productQuantity}
-                      onChange={handleFormattedChange('productQuantity')}
-                      onBlur={formik.handleBlur}
-                      error={
-                        formik.touched.productQuantity &&
-                        formik.errors.productQuantity
-                      }
-                    />
+
                     <InputField
                       label="Expiry Date"
                       name="expiryDate"

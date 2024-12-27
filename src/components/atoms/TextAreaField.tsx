@@ -3,6 +3,7 @@ interface TextAreaFieldProps {
   placeholder?: string
   name: string
   value: string
+  compulsory?: boolean
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
   onBlur: (e: React.FocusEvent<HTMLTextAreaElement>) => void
   rows?: number
@@ -14,6 +15,7 @@ const TextAreaField: React.FC<TextAreaFieldProps> = ({
   placeholder = 'Enter text...',
   name,
   value,
+  compulsory,
   onChange,
   onBlur,
   rows = 4,
@@ -21,7 +23,12 @@ const TextAreaField: React.FC<TextAreaFieldProps> = ({
 }) => {
   return (
     <div className="flex flex-col space-y-2">
-      {label && <label>{label}</label>}
+      {label && (
+        <label className="text-gray-500">
+          {label}
+          <span className="text-red-600">{compulsory === true ? '*' : ''}</span>
+        </label>
+      )}
       <textarea
         name={name}
         value={value}
@@ -29,9 +36,9 @@ const TextAreaField: React.FC<TextAreaFieldProps> = ({
         onBlur={onBlur}
         placeholder={placeholder}
         rows={rows}
-        className="rounded px-4 py-2 border border-gray-300 focus:outline-none"
+        className="px-4 py-2 border border-gray-300 rounded focus:outline-none"
       />
-      {error && <div className="text-red-600 text-xs">{error}</div>}{' '}
+      {error && <div className="text-xs text-red-600">{error}</div>}{' '}
     </div>
   )
 }

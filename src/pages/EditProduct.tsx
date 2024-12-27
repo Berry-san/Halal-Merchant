@@ -126,8 +126,8 @@ const EditProduct: React.FC = () => {
       ) : (
         <form onSubmit={formik.handleSubmit}>
           <div className="grid grid-cols-5 gap-5 mt-2">
-            <section className="order-1 col-span-5 lg:col-span-2 lg:order-2">
-              <div className="p-4 border rounded">
+            <section className="relative order-1 col-span-5 lg:col-span-2 lg:order-2">
+              <div className="p-4 border rounded md:sticky top-10">
                 <h3>Product Image</h3>
                 <div className="flex items-center justify-center w-full">
                   <label className="flex flex-col items-center justify-center w-full">
@@ -139,7 +139,11 @@ const EditProduct: React.FC = () => {
                       />
                     )}
                     <p className="w-full py-4 mt-2 text-center text-gray-500 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                      {newImage ? 'Change Image' : 'Upload New Image'}
+                      <p className="w-full px-6 py-4 mt-2 text-center text-gray-500 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                        {newImage
+                          ? 'Change Product Image. Supported formats: JPG, PNG (Max: 2MB)'
+                          : 'Upload New Image. Supported formats: JPG, PNG  (Max: 2MB)'}
+                      </p>
                     </p>
                     <input
                       type="file"
@@ -248,7 +252,7 @@ const EditProduct: React.FC = () => {
                     </div>
 
                     <TextAreaField
-                      label="Product Description"
+                      label="Product Description (Max: 1250 characters)"
                       name="productDescription"
                       value={formik.values.productDescription}
                       onChange={formik.handleChange}
