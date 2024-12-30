@@ -27,7 +27,6 @@ const AddProduct = () => {
   const { data: subcategories } = useSubcategoriesByCategoryId(
     selectedCategoryId as number
   )
-  console.log(subcategories)
 
   // State for storing the uploaded file
   const [uploadedImage, setUploadedImage] = useState<File | null>(null)
@@ -60,7 +59,9 @@ const AddProduct = () => {
       shortProductName: Yup.string().required('Short Name is required'),
       productCategory: Yup.string().required('Category is required'),
       productSubCategory: Yup.string().required('Subcategory is required'),
-      productDescription: Yup.string().required('Description is required'),
+      productDescription: Yup.string()
+        .required('Description is required')
+        .max(1250, 'Max length is 1250 characters'),
       productPrice: Yup.string().required('Price is required'),
       vat: Yup.number().required('VAT is required').positive(),
       productDiscount: Yup.number().required('Discount is required').positive(),
@@ -267,6 +268,7 @@ const AddProduct = () => {
                     }
                     rows={5}
                     compulsory={true}
+                    maxLength={1250}
                   />
                 </section>
 

@@ -262,6 +262,7 @@ const EditProduct: React.FC = () => {
                         formik.errors.productDescription
                       }
                       rows={5}
+                      maxLength={1250}
                     />
                   </section>
 

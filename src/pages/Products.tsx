@@ -110,10 +110,6 @@ const Products: React.FC = () => {
       formData.append('productPicture', productImageURL)
     }
 
-    console.log(productToUpdate)
-
-    console.log(productToUpdate.status)
-
     // Submit the updated product data
     updateProductMutation.mutate({
       updateData: formData,

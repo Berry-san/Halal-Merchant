@@ -1,12 +1,12 @@
 interface SwitchProps {
   isActive: boolean
-  onToggle: (isActive: boolean) => void
+  onToggle: () => void
 }
 
 const Switch: React.FC<SwitchProps> = ({ isActive, onToggle }) => {
   return (
     <button
-      onClick={() => onToggle(!isActive)}
+      onClick={() => onToggle()}
       className={`w-10 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${
         isActive ? 'bg-secondary' : 'bg-gray-300'
       }`}
