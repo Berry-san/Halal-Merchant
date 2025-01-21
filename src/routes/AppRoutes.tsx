@@ -20,6 +20,7 @@ function AppRoutes() {
   return (
     <Routes>
       <Route
+        // index
         path={paths.login}
         element={authChecker === true ? <Navigate replace to="/" /> : <Login />}
         // element={<Login />}
@@ -28,7 +29,12 @@ function AppRoutes() {
       {/* <Route path={paths.forgotPassword} element={<ForgotPassword />} /> */}
       <Route path={paths.trackOrder} element={<TrackOrder />} />
 
-      <Route path={paths.dashboard} element={<Layout />}>
+      <Route
+        path={paths.dashboard}
+        element={
+          authChecker === false ? <Navigate replace to="/login" /> : <Layout />
+        }
+      >
         <Route index element={<Dashboard />} />
         <Route path={paths.orders} element={<Orders />} />
         <Route path={paths.products} element={<Products />} />

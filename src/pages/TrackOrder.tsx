@@ -1,8 +1,9 @@
 import InputField from '../components/atoms/InputField'
 import orderImages from '../assets/images/orderImages.png'
 import halalLogo from '../assets/images/halalLogo.png'
-import { useState } from 'react'
+import { SetStateAction, useState } from 'react'
 import { apiBase } from '../api/apiBase'
+import Header from '../components/organisms/Header'
 
 const TrackOrder = () => {
   // State for tracking number input
@@ -20,7 +21,6 @@ const TrackOrder = () => {
   const fetchOrderDetails = async () => {
     setLoading(true)
     setError(null)
-    console.log(error)
     try {
       const response = await apiBase.post(
         '/store_transaction/transaction_details',
@@ -29,6 +29,7 @@ const TrackOrder = () => {
         }
       )
       setOrderDetails(response.data.result[0])
+      console.log(orderDetails.product_items)
     } catch (error) {
       setError('Failed to fetch order details. Please try again.')
       console.error(error)
@@ -39,7 +40,7 @@ const TrackOrder = () => {
 
   return (
     <div>
-      <header className="sticky top-0 z-30 flex w-full bg-[#101420] border-b border-border_color drop-shadow-2">
+      {/* <header className="sticky top-0 z-30 flex w-full bg-[#101420] border-b border-border_color drop-shadow-2">
         <div className="flex items-center justify-between flex-grow px-3 md:px-6 py-2.5 lg:h-16 shadow-2 2xl:px-11">
           <div className="flex items-center justify-between gap-2 sm:gap-4">
             <div className="items-center hidden pl-4 text-white lg:flex">
@@ -48,7 +49,13 @@ const TrackOrder = () => {
             </div>
           </div>
         </div>
-      </header>
+      </header> */}
+      <Header
+        headerTitle="HalalNest Order Tracker"
+        sidebarOpen={false}
+        setSidebarOpen={() => {}}
+        sidebar={false}
+      />
       <main className="px-8 py-6 mx-auto mt-6">
         <div className="grid grid-cols-5 gap-8">
           <section className="flex flex-col col-span-5 gap-4 md:col-span-2">
@@ -73,14 +80,14 @@ const TrackOrder = () => {
               <div className="p-4 space-y-6 border rounded">
                 <div className="flex flex-col">
                   <p className="text-gray-500">Order Summary</p>
-                  <p className="text-sm font-medium">
+                  <p className="text-sm font-medium capitalize">
                     Customer Name : {orderDetails?.register_name}
                   </p>
                 </div>
                 <div className="grid grid-cols-2">
                   <div className="flex flex-col justify-between col-span-2 space-y-4 md:col-span-1">
                     <div className="flex flex-col">
-                      <p className="text-gray-500">Order ID</p>
+                      <p className="text-gray-500">Transaction Reference</p>
                       <p className="text-sm font-medium">
                         {orderDetails?.trans_reference}
                       </p>
@@ -88,7 +95,11 @@ const TrackOrder = () => {
                     <div className="flex flex-col">
                       <p className="text-gray-500">Order Date</p>
                       <p className="text-sm font-medium">
-                        {orderDetails.transaction_dt || 'No date'}
+                        {orderDetails.transaction_dt
+                          ? new Date(
+                              orderDetails.transaction_dt
+                            ).toLocaleDateString()
+                          : 'No date'}
                       </p>
                     </div>
                   </div>
@@ -102,8 +113,11 @@ const TrackOrder = () => {
                     <div className="flex flex-col">
                       <p className="text-gray-500">Estimated Delivery Date</p>
                       <p className="text-sm font-medium">
-                        {' '}
-                        {orderDetails.transaction_dt || 'No date'}
+                        {orderDetails.transaction_dt
+                          ? new Date(
+                              orderDetails.transaction_dt
+                            ).toLocaleDateString()
+                          : 'No date'}
                       </p>
                     </div>
                   </div>

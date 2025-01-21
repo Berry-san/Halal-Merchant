@@ -74,12 +74,12 @@ const Login: React.FC = () => {
 
   return (
     <>
-      <Header sidebarOpen={false} setSidebarOpen={() => console.log('')} />
+      <Header sidebarOpen={false} sidebar={false} />
       <div className="flex items-center justify-center mt-20">
         {isLoading ? (
           <div>Loading...</div>
         ) : (
-          <div className="bg-[#ffffff] max-w-3xl mx-auto rounded-md">
+          <div className="bg-[#ffffff] max-w-5xl mx-auto rounded-md">
             <div className="px-4 py-6 md:px-10">
               <div className="flex flex-col p-4 mb-5 border rounded">
                 <h4 className="text-sm font-semibold">Sign in</h4>

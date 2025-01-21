@@ -25,15 +25,15 @@ const ProductTable: React.FC<ProductTableProps> = ({
   const reversedData = [...data].reverse()
 
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const usersPerPage: number = 10
+  const itemsPerPage: number = 10
 
   const paginate = (pageNumber: number): void => {
     setCurrentPage(pageNumber)
   }
 
-  const indexOfLastUser: number = currentPage * usersPerPage
-  const indexOfFirstUser: number = indexOfLastUser - usersPerPage
-  const currentUsers = reversedData.slice(indexOfFirstUser, indexOfLastUser)
+  const indexOfLastItem: number = currentPage * itemsPerPage
+  const indexOfFirstItem: number = indexOfLastItem - itemsPerPage
+  const currentUsers = reversedData.slice(indexOfFirstItem, indexOfLastItem)
 
   return (
     <>
@@ -116,7 +116,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
               currentPage={currentPage}
               onPageChange={paginate}
               totalCount={data.length}
-              pageSize={usersPerPage}
+              pageSize={itemsPerPage}
               siblingCount={1}
             />
           </div>

@@ -19,10 +19,12 @@ export const orderService = {
 
   // Update order status
   async updateOrderStatus(
-    orderId: number,
-    status: UpdateOrderStatusRequest
+    newStatusData: UpdateOrderStatusRequest
   ): Promise<void> {
-    await apiBase.put(`${BASE_URL}/update_order_status/${orderId}`, status)
+    await apiBase.put(
+      `${BASE_URL}/store_transaction/update_merchant_status`,
+      newStatusData
+    )
   },
 
   // Fetch orders for a specific merchant
@@ -55,5 +57,13 @@ export const orderService = {
   async fetchDeliveryStatus(orderId: number): Promise<DeliveryStatus> {
     const response = await apiBase.get(`${BASE_URL}/delivery_status/${orderId}`)
     return response.data
+  },
+
+  // Fetch all orders
+  async fetchAllOrders(): Promise<MerchantOrder[]> {
+    const response = await apiBase.get(
+      `${BASE_URL}/store_transaction/all_merchant_details`
+    )
+    return response.data.schools
   },
 }

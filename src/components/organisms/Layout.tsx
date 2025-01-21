@@ -6,6 +6,7 @@ import { useMerchantStore } from '../../store/useMerchantStore'
 
 const Layout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
+
   const navigate = useNavigate()
 
   const { merchant } = useMerchantStore()
@@ -18,7 +19,12 @@ const Layout: React.FC = () => {
 
   return (
     <div className="w-full flex flex-col h-screen overflow-hidden bg-[#f4f5f9]">
-      <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <Header
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+        headerTitle="HalalNest Merchant"
+        sidebar={true}
+      />
       <div className="flex w-full">
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <main className="flex-1 h-screen overflow-x-hidden overflow-y-auto ">

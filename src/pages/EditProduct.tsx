@@ -115,6 +115,24 @@ const EditProduct: React.FC = () => {
     },
   })
 
+  const formatNumberWithCommas = (value: string) => {
+    const numericValue = value.replace(/\D/g, '') // Remove non-numeric characters
+    return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',') // Format with commas
+  }
+
+  const handleFormattedChange =
+    (fieldName: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      const rawValue = e.target.value.replace(/[^\d.]/g, '') // Remove non-numeric characters
+      const formattedValue = formatNumberWithCommas(rawValue)
+      formik.setFieldValue(fieldName, formattedValue) // Update Formik with formatted value
+
+      if (fieldName === 'productPrice') {
+        const numericValue = parseFloat(rawValue) || 0
+        const vat = numericValue * 0.075
+        formik.setFieldValue('vat', vat)
+      }
+    }
+
   return (
     <div>
       <div className="flex space-x-4">
@@ -138,12 +156,10 @@ const EditProduct: React.FC = () => {
                         className="object-fill w-full h-64 rounded-lg"
                       />
                     )}
-                    <p className="w-full py-4 mt-2 text-center text-gray-500 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                      <p className="w-full px-6 py-4 mt-2 text-center text-gray-500 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                        {newImage
-                          ? 'Change Product Image. Supported formats: JPG, PNG (Max: 2MB)'
-                          : 'Upload New Image. Supported formats: JPG, PNG  (Max: 2MB)'}
-                      </p>
+                    <p className="w-full px-6 py-4 mt-2 text-center text-gray-500 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                      {newImage
+                        ? 'Change Product Image. Supported formats: JPG, PNG (Max: 2MB)'
+                        : 'Upload New Image. Supported formats: JPG, PNG  (Max: 2MB)'}
                     </p>
                     <input
                       type="file"
@@ -252,7 +268,7 @@ const EditProduct: React.FC = () => {
                     </div>
 
                     <TextAreaField
-                      label="Product Description (Max: 1250 characters)"
+                      label="Product Description (Max: 1024 characters)"
                       name="productDescription"
                       value={formik.values.productDescription}
                       onChange={formik.handleChange}
@@ -262,7 +278,7 @@ const EditProduct: React.FC = () => {
                         formik.errors.productDescription
                       }
                       rows={5}
-                      maxLength={1250}
+                      maxLength={1024}
                     />
                   </section>
 
@@ -272,13 +288,15 @@ const EditProduct: React.FC = () => {
                       <InputField
                         label="Product Price"
                         name="productPrice"
+                        placeholder="Enter price..."
                         value={formik.values.productPrice}
-                        onChange={formik.handleChange}
+                        onChange={handleFormattedChange('productPrice')}
                         onBlur={formik.handleBlur}
                         error={
                           formik.touched.productPrice &&
                           formik.errors.productPrice
                         }
+                        compulsory={true}
                       />
                       <InputField
                         label="VAT"

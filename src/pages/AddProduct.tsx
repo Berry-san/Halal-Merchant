@@ -61,7 +61,7 @@ const AddProduct = () => {
       productSubCategory: Yup.string().required('Subcategory is required'),
       productDescription: Yup.string()
         .required('Description is required')
-        .max(1250, 'Max length is 1250 characters'),
+        .max(1024, 'Max length is 1024 characters'),
       productPrice: Yup.string().required('Price is required'),
       vat: Yup.number().required('VAT is required').positive(),
       productDiscount: Yup.number().required('Discount is required').positive(),
@@ -116,8 +116,15 @@ const AddProduct = () => {
   // General change handler for formatted inputs
   const handleFormattedChange =
     (fieldName: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      const formattedValue = formatNumberWithCommas(e.target.value)
+      const rawValue = e.target.value.replace(/[^\d.]/g, '') // Remove non-numeric characters
+      const formattedValue = formatNumberWithCommas(rawValue)
       formik.setFieldValue(fieldName, formattedValue) // Update Formik with formatted value
+
+      if (fieldName === 'productPrice') {
+        const numericValue = parseFloat(rawValue) || 0
+        const vat = numericValue * 0.075
+        formik.setFieldValue('vat', vat)
+      }
     }
 
   return (
@@ -257,7 +264,7 @@ const AddProduct = () => {
                   </div>
 
                   <TextAreaField
-                    label="Product Description (Max: 1250 characters)"
+                    label="Product Description (Max: 1024 characters)"
                     name="productDescription"
                     value={formik.values.productDescription}
                     onChange={formik.handleChange}
@@ -268,7 +275,7 @@ const AddProduct = () => {
                     }
                     rows={5}
                     compulsory={true}
-                    maxLength={1250}
+                    maxLength={1024}
                   />
                 </section>
 
@@ -278,7 +285,7 @@ const AddProduct = () => {
                     <InputField
                       label="Product Price"
                       name="productPrice"
-                      placeholder="100,000"
+                      placeholder="Enter price..."
                       value={formik.values.productPrice}
                       onChange={handleFormattedChange('productPrice')}
                       onBlur={formik.handleBlur}

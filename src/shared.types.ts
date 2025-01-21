@@ -139,7 +139,9 @@ export interface OrderDetails {
 }
 
 export interface UpdateOrderStatusRequest {
-  status: string
+  merchantId: string | number
+  customerId: string | number
+  newStatus: string | number
 }
 
 export interface MerchantOrder {

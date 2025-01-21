@@ -103,7 +103,7 @@ const Signup: React.FC = () => {
 
   return (
     <>
-      <Header sidebarOpen={false} setSidebarOpen={() => console.log('')} />
+      <Header sidebarOpen={false} sidebar={false} />
       <div className="flex items-center justify-center md:mt-20">
         {isLoading ? (
           <div>Loading...</div>

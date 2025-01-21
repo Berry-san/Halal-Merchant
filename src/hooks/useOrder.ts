@@ -18,8 +18,8 @@ export function useOrderDetails(orderId: number) {
 export function useUpdateOrderStatus(orderId: number) {
   const queryClient = useQueryClient()
   return useMutation(
-    (status: UpdateOrderStatusRequest) =>
-      orderService.updateOrderStatus(orderId, status),
+    (newStatusData: UpdateOrderStatusRequest) =>
+      orderService.updateOrderStatus(newStatusData),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['orderDetails', orderId])
@@ -52,5 +52,12 @@ export function useOrderStatusHistory(orderId: number) {
 export function useDeliveryStatus(orderId: number) {
   return useQuery<DeliveryStatus, Error>(['deliveryStatus', orderId], () =>
     orderService.fetchDeliveryStatus(orderId)
+  )
+}
+
+export function useAllOrders() {
+  return useQuery<MerchantOrder[], Error>(
+    'allOrders',
+    orderService.fetchAllOrders
   )
 }

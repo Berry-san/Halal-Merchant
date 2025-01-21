@@ -2,15 +2,16 @@ import { useState } from 'react'
 import SelectDropdown from '../components/atoms/SelectDropdown'
 import SearchBar from '../components/molecules/SearchBar'
 import Table, { Column } from '../components/molecules/Table'
-import { useMerchantOrders } from '../hooks/useOrder'
+import { useAllOrders, useMerchantOrders } from '../hooks/useOrder'
 import { useMerchantStore } from '../store/useMerchantStore'
 import Pagination from '../components/atoms/Pagination/Pagination'
 
 const statusOptions = [
+  { label: 'Received', value: 'received' },
   { label: 'Accepted', value: 'accepted' },
+  { label: 'Processing', value: 'processing' },
   { label: 'Shipped', value: 'shipped' },
   { label: 'Delivered', value: 'delivered' },
-  { label: 'Received', value: 'received' },
 ]
 
 const Order = () => {
@@ -38,24 +39,20 @@ const Order = () => {
     isError,
   } = useMerchantOrders(merchantId)
 
-  // Add order_reference to each order
-  // const orders = rawOrders.map((order) => ({
-  //   ...order,
-  //   order_reference: `ORD#${Math.random().toString().slice(2, 8)}`, // Generate unique reference
-  // }))
+  // const { data: orders = [], isLoading, isError } = useAllOrders()
 
   const reversedData = [...orders].reverse()
 
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const usersPerPage: number = 10
+  const itemsPerPage: number = 10
 
   const paginate = (pageNumber: number): void => {
     setCurrentPage(pageNumber)
   }
 
-  const indexOfLastUser: number = currentPage * usersPerPage
-  const indexOfFirstUser: number = indexOfLastUser - usersPerPage
-  const currentUsers = reversedData.slice(indexOfFirstUser, indexOfLastUser)
+  // const indexOfLastItem: number = currentPage * itemsPerPage
+  // const indexOfFirstItem: number = indexOfLastItem - itemsPerPage
+  // const currentUsers = reversedData.slice(indexOfFirstItem, indexOfLastItem)
 
   const statusMapping: Record<string, number> = {
     accepted: 3,
@@ -94,6 +91,14 @@ const Order = () => {
         }).format(value),
     },
     {
+      header: 'Quantity',
+      key: 'quantity',
+      format: (value) =>
+        new Intl.NumberFormat('en-US', {
+          style: 'decimal',
+        }).format(value),
+    },
+    {
       header: 'Order status',
       key: 'merchant_status',
       format: (value) => {
@@ -129,6 +134,13 @@ const Order = () => {
       : true
     return matchesSearch && matchesStatus
   })
+
+  const indexOfLastItem = currentPage * itemsPerPage
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage
+  const paginatedOrders = filteredOrders.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  )
 
   const clearFilters = () => {
     setSearchTerm('')
@@ -169,15 +181,15 @@ const Order = () => {
       </div>
 
       <div className="relative">
-        {currentUsers.length > 0 ? (
+        {paginatedOrders.length > 0 ? (
           <>
-            <Table columns={columns} data={filteredOrders} />
+            <Table columns={columns} data={paginatedOrders} />
             <div className="flex justify-center mt-2">
               <Pagination
                 currentPage={currentPage}
                 onPageChange={paginate}
                 totalCount={filteredOrders.length}
-                pageSize={usersPerPage}
+                pageSize={itemsPerPage}
                 siblingCount={1}
               />
             </div>

@@ -3,7 +3,7 @@ import React from 'react'
 interface InputFieldProps {
   label?: string
   placeholder?: string
-  value: string
+  value: string | number
   name: string
   compulsory?: boolean
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void

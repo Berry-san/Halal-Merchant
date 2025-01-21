@@ -28,7 +28,7 @@ const Modal: React.FC<ModalProps> = ({
       onClick={handleClose}
     >
       <div
-        className={`relative flex flex-col mx-3 space-y-4 bg-white rounded ${
+        className={`relative flex flex-col mx-3 min-w-96 h-56 space-y-4 bg-white rounded ${
           className || ''
         }`}
       >

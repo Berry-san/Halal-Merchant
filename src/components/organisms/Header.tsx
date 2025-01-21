@@ -6,10 +6,17 @@ import { useMerchantStore } from '../../store/useMerchantStore'
 
 interface HeaderProps {
   sidebarOpen: boolean
-  setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setSidebarOpen?: React.Dispatch<React.SetStateAction<boolean>>
+  headerTitle?: string
+  sidebar: boolean
 }
 
-const Header: React.FC<HeaderProps> = ({ sidebarOpen, setSidebarOpen }) => {
+const Header: React.FC<HeaderProps> = ({
+  sidebarOpen,
+  setSidebarOpen = () => {},
+  headerTitle = 'HalalNest Merchant',
+  sidebar,
+}) => {
   const { merchant } = useMerchantStore()
 
   // const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light')
@@ -26,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({ sidebarOpen, setSidebarOpen }) => {
         <div className="flex items-center justify-between gap-2 sm:gap-4">
           <div className="items-center hidden pl-4 text-white lg:flex">
             <img src={halalLogo} className="w-12 h-12" alt="" />
-            <p className="font-bold">HalalNest Merchant</p>
+            <p className="font-bold">{headerTitle}</p>
           </div>
 
           {merchant && (
@@ -38,7 +45,7 @@ const Header: React.FC<HeaderProps> = ({ sidebarOpen, setSidebarOpen }) => {
               }}
               className="z-40 block p-1.5 lg:hidden"
             >
-              <img src={hamburger} className="w-8 h-8" alt="" />
+              {sidebar && <img src={hamburger} className="w-8 h-8" alt="" />}
             </button>
           )}
         </div>

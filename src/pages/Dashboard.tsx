@@ -61,6 +61,14 @@ const Dashboard = () => {
         }).format(value),
     },
     {
+      header: 'Quantity',
+      key: 'quantity',
+      format: (value) =>
+        new Intl.NumberFormat('en-US', {
+          style: 'decimal',
+        }).format(value), // format as decimal
+    },
+    {
       header: 'Order status',
       key: 'merchant_status',
       format: (value) => {
@@ -86,7 +94,7 @@ const Dashboard = () => {
     },
   ]
 
-  const { merchant } = useMerchantStore() // Get merchant ID from the store
+  const { merchant } = useMerchantStore()
   const merchantId = merchant?.merchantId
 
   if (!merchantId) {
