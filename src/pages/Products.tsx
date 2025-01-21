@@ -6,7 +6,7 @@ import { Column } from '../components/molecules/Table'
 import {
   useDeleteProduct,
   useProductListByID,
-  useProductsList,
+  // useProductsList,
   useUpdateProduct,
 } from '../hooks/useProducts'
 import { Product } from '../shared.types'
@@ -33,14 +33,13 @@ const Products: React.FC = () => {
     return <div>Error loading merchant data...</div>
   }
 
-  // Fetch products from the API using the hook
-  // const {
-  //   data: products = [],
-  //   isLoading,
-  //   error,
-  // } = useProductListByID(merchantId)
+  const {
+    data: products = [],
+    isLoading,
+    error,
+  } = useProductListByID(merchantId)
 
-  const { data: products = [], isLoading, error } = useProductsList()
+  // const { data: products = [], isLoading, error } = useProductsList()
 
   if (!products) {
     return <div>Loading product data...</div>

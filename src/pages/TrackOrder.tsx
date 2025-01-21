@@ -1,7 +1,7 @@
 import InputField from '../components/atoms/InputField'
 import orderImages from '../assets/images/orderImages.png'
-import halalLogo from '../assets/images/halalLogo.png'
-import { SetStateAction, useState } from 'react'
+// import halalLogo from '../assets/images/halalLogo.png'
+import { useState } from 'react'
 import { apiBase } from '../api/apiBase'
 import Header from '../components/organisms/Header'
 
@@ -11,6 +11,7 @@ const TrackOrder = () => {
   const [orderDetails, setOrderDetails] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  console.log(error)
 
   // Handler for tracking number input change
   const handleTrackingChange = (e: React.ChangeEvent<HTMLInputElement>) => {

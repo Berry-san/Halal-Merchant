@@ -34,7 +34,7 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
       customerId: selectedRow.customer_id,
       merchantId: selectedRow.merchant_id,
     }
-    // updateOrderStatus(newStatusData)
+    updateOrderStatus(newStatusData)
     console.log(newStatusData)
   }
 

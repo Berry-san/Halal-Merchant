@@ -2,7 +2,7 @@ import { useState } from 'react'
 import SelectDropdown from '../components/atoms/SelectDropdown'
 import SearchBar from '../components/molecules/SearchBar'
 import Table, { Column } from '../components/molecules/Table'
-import { useAllOrders, useMerchantOrders } from '../hooks/useOrder'
+import { useMerchantOrders } from '../hooks/useOrder'
 import { useMerchantStore } from '../store/useMerchantStore'
 import Pagination from '../components/atoms/Pagination/Pagination'
 
